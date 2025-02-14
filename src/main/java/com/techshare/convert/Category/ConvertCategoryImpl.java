@@ -8,23 +8,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConvertCategoryImpl implements  ConvertCategory{
-
-    @Autowired
-    private ModelMapper modelMapper;
+public class ConvertCategoryImpl implements ConvertCategory {
 
     @Override
     public Category convertCategoryRequestToCategory(CategoryRequest categoryRequest) {
-        return modelMapper.map(categoryRequest, Category.class);
+        Category category = new Category();
+        category.setName(categoryRequest.getName());
+        category.setImage(categoryRequest.getImage());
+        return category;
     }
 
     @Override
     public void convertUpdateCategoryRequestToCategory(CategoryRequest categoryRequest, Category existingCategory) {
-        modelMapper.map(categoryRequest, existingCategory);
+        existingCategory.setName(categoryRequest.getName());
+        existingCategory.setImage(categoryRequest.getImage());
     }
 
     @Override
     public CategoryDTO convertCategoryToCategoryDTO(Category category) {
-        return modelMapper.map(category, CategoryDTO.class);
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setCategory_id(category.getCategory_id());
+        categoryDTO.setName(category.getName());
+        categoryDTO.setImage(category.getImage());
+        return categoryDTO;
     }
 }

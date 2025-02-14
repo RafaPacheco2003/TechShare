@@ -10,6 +10,8 @@ public interface CategoryService {
     CategoryDTO create(CategoryRequest categoryRequest);
     Optional<CategoryDTO> getCategoryById(Long id);
     Optional<CategoryDTO> updateCategory(Long id, CategoryRequest categoryRequest); // Actualizar una categoría por ID
-    List<CategoryDTO> getAllCategories(); // Obtener todas las categorías
-    void deleteCategory(Long id); // Eliminar una categoría por ID
+    List<CategoryDTO> getAllCategories();
+    void deleteCategory(Long id);
+
+    void verifyCategoryExists(Long category_id);
 }

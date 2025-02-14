@@ -1,25 +1,18 @@
-package com.techshare.entities;
+package com.techshare.DTO;
 
-
-import jakarta.persistence.*;
+import com.techshare.entities.Category;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-public class Subcategory {
+public class SubcategoryDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long subcategory_id;
-
     private String name;
-
     private String image;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private Long category_id;
 
     public Long getSubcategory_id() {
         return subcategory_id;
@@ -45,11 +38,11 @@ public class Subcategory {
         this.image = image;
     }
 
-    public Category getCategory() {
-        return category;
+    public Long getCategory_id() {
+        return category_id;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory_id(Long category_id) {
+        this.category_id = category_id;
     }
 }

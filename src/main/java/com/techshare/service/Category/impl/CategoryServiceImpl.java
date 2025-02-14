@@ -61,4 +61,11 @@ public class CategoryServiceImpl implements CategoryService {
         }
         categoryRepository.deleteById(id);
     }
+
+    @Override
+    public void verifyCategoryExists(Long category_id) {
+        if (!categoryRepository.existsById(category_id)) {
+            throw new CategoryNotFoundException("Category not found");
+        }
+    }
 }
