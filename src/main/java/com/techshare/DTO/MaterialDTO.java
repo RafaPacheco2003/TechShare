@@ -1,24 +1,14 @@
-package com.techshare.entities;
+package com.techshare.DTO;
 
-import jakarta.persistence.*;
-
-@Entity
-public class Material {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MaterialDTO {
     private Long material_id;
     private String name;
-    private String descripcion;
+    private String description;
     private Integer stock;
     private Integer borrowable_stock;
-    @ManyToOne
-    @JoinColumn(name = "subcategory_id")
-    private Subcategory subcategory;
+    private Long subcategory;
     private Double price;
     private String image;
-    //private Usuario usario; //Aun no se implementa hasta el security
-
 
     public Long getMaterial_id() {
         return material_id;
@@ -36,12 +26,12 @@ public class Material {
         this.name = name;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getStock() {
@@ -60,11 +50,11 @@ public class Material {
         this.borrowable_stock = borrowable_stock;
     }
 
-    public Subcategory getSubcategory() {
+    public Long getSubcategory() {
         return subcategory;
     }
 
-    public void setSubcategory(Subcategory subcategory) {
+    public void setSubcategory(Long subcategory) {
         this.subcategory = subcategory;
     }
 

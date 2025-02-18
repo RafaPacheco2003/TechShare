@@ -1,0 +1,61 @@
+package com.techshare.convert.Movement;
+
+import com.techshare.DTO.MovementDTO;
+import com.techshare.entities.Material;
+import com.techshare.entities.Movement;
+import com.techshare.http.request.MovementRequest;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ConvertMovementImpl implements ConvertMovement {
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Override
+    public Movement convertMovementRequestToMovementEntity(MovementRequest movementRequest) {
+        Movement movement = new Movement();
+        movement.setMoveType(movementRequest.getMoveType());
+        movement.setQuantity(movementRequest.getQuantity());
+        movement.setComment(movementRequest.getComment());
+
+        // Asignar material a partir del material_id
+        Material material = new Material();
+        material.setMaterial_id(movementRequest.getMaterial_id());
+        movement.setMaterial(material);
+
+        return movement;
+    }
+
+    @Override
+    public void convertUpdateMovementRequestToMovement(MovementRequest movementRequest, Movement existingMovement) {
+        existingMovement.setMoveType(movementRequest.getMoveType());
+        existingMovement.setQuantity(movementRequest.getQuantity());
+        existingMovement.setComment(movementRequest.getComment());
+
+        // Si es necesario actualizar el material
+        if (movementRequest.getMaterial_id() != null) {
+            Material material = new Material();
+            material.setMaterial_id(movementRequest.getMaterial_id());
+            existingMovement.setMaterial(material);
+        }
+    }
+
+    @Override
+    public MovementDTO convertMovementEntityToMovementDTO(Movement movement) {
+        MovementDTO movementDTO = new MovementDTO();
+        movementDTO.setMovement_id(movement.getMovement_id());
+        movementDTO.setMoveType(movement.getMoveType());
+        movementDTO.setQuantity(movement.getQuantity());
+        movementDTO.setComment(movement.getComment());
+        movementDTO.setDate(movement.getDate());
+
+        if (movement.getMaterial() != null) {
+            movementDTO.setMaterial_id(movement.getMaterial().getMaterial_id());
+        }
+
+        return movementDTO;
+    }
+}

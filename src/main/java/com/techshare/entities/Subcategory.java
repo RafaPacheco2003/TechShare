@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 public class Subcategory {
 
@@ -20,6 +22,17 @@ public class Subcategory {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL)
+    private List<Material> materials;
+
+    public List<Material> getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(List<Material> materials) {
+        this.materials = materials;
+    }
 
     public Long getSubcategory_id() {
         return subcategory_id;

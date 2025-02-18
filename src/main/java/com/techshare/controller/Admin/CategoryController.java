@@ -1,4 +1,4 @@
-package com.techshare.controller;
+package com.techshare.controller.Admin;
 
 import com.techshare.DTO.CategoryDTO;
 import com.techshare.http.request.CategoryRequest;
