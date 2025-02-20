@@ -15,7 +15,12 @@ public class ConvertMaterialImpl implements ConvertMaterial {
         Material material = new Material();
         material.setName(materialRequest.getName());
         material.setDescripcion(materialRequest.getDescripcion());
+        if(materialRequest.getStock()== null || materialRequest.getStock()== 0){
+            material.setStock(0);
+            material.setBorrowable_stock(0);
+        }
         material.setStock(materialRequest.getStock());
+        material.setBorrowable_stock(materialRequest.getStock());
 
         // Asumiendo que obtendrás el subcategory correspondiente por su ID
         Subcategory subcategory = new Subcategory();

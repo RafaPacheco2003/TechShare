@@ -23,7 +23,7 @@ public class Subcategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subcategory", cascade = CascadeType.ALL)
     private List<Material> materials;
 
     public List<Material> getMaterials() {

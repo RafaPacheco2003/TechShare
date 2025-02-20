@@ -7,9 +7,12 @@ import com.techshare.http.request.SubcategoryRequest;
 import com.techshare.repositories.CategoryRepository;
 import com.techshare.repositories.SubcategoryRepository;
 import com.techshare.service.Category.CategoryService;
+import com.techshare.service.ImageStorage.ImageStorage;
 import com.techshare.service.Subcategory.SubcategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +30,11 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Autowired
     private ConvertSubcategory convertSubcategory;
+
+    @Value("${server.url")
+    private String server;
+    @Autowired
+    private ImageStorage imageStorage;
 
     @Override
     public SubcategoryDTO createSubcategory(SubcategoryRequest subcategoryRequest) {
@@ -69,5 +77,10 @@ public class SubcategoryServiceImpl implements SubcategoryService {
             throw new RuntimeException("Subcategory not found");
         }
         subcategoryRepository.deleteById(id);
+    }
+
+    @Override
+    public String saveImage(MultipartFile imageFile) {
+        return imageStorage.saveImage(imageFile); // Delegar el guardado de la imagen al servicio de almacenamiento
     }
 }
