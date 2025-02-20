@@ -13,16 +13,23 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/admin/subcategory")
 public class SubcategoryController {
 
+
     @Autowired
     private SubcategoryService subcategoryService;
 
-    @PostMapping
+    @PostMapping(value = "/save", consumes = "multipart/form-data")
     public ResponseEntity<?> create(@RequestPart("subcategory") SubcategoryRequest subcategoryRequest,
-                                    @RequestPart("image") MultipartFile imageFile) {
-        String imageUrl = subcategoryService.saveImage(imageFile);
-        subcategoryRequest.setImage(imageUrl); // Guardar la URL de la imagen
-        return new ResponseEntity<>(subcategoryService.createSubcategory(subcategoryRequest), HttpStatus.CREATED);
+                                    @RequestPart("image") MultipartFile multipartFile) {
+        // Crear la subcategoría y obtener el DTO
+        SubcategoryDTO subcategoryDTO = subcategoryService.createSubcategory(subcategoryRequest, multipartFile);
+
+        // Retornar solo el DTO sin la URL completa de la imagen
+        return new ResponseEntity<>(subcategoryDTO, HttpStatus.CREATED);
     }
+
+
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getSubcategoryById(@PathVariable Long id) {

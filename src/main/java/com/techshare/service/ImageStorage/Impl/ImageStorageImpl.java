@@ -18,8 +18,8 @@ public class ImageStorageImpl implements ImageStorage {
 
     @Value("${storage.location}")
     private String storageLocation;
-    @Value("${server.url")
-    private String server;
+
+
 
     @Autowired
     private ImageValidator imageValidator;
@@ -27,7 +27,6 @@ public class ImageStorageImpl implements ImageStorage {
 
     @Override
     public String saveImage(MultipartFile multipartFile) {
-        imageValidator.validateImage(multipartFile);
         Path path = Paths.get(storageLocation, multipartFile.getOriginalFilename());
         try {
             Files.createDirectories(path.getParent());
@@ -35,7 +34,9 @@ public class ImageStorageImpl implements ImageStorage {
         } catch (IOException e) {
             throw new RuntimeException("Failed to save image", e);
         }
-        return server + "/images/" + multipartFile.getOriginalFilename(); // Devolver la URL completa
+
+        // Retornar la ruta absoluta de la imagen guardada
+        return path.toAbsolutePath().toString();
     }
 
 

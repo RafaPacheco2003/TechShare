@@ -14,44 +14,85 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class SubcategoryServiceImpl implements SubcategoryService {
+    @Value("${storage.location}")
+    private String storageLocation;
+
 
     @Autowired
     private SubcategoryRepository subcategoryRepository;
+
     @Autowired
     private CategoryRepository categoryRepository;
+
     @Autowired
     private CategoryService categoryService;
 
     @Autowired
     private ConvertSubcategory convertSubcategory;
 
-    @Value("${server.url")
-    private String server;
     @Autowired
     private ImageStorage imageStorage;
 
     @Override
-    public SubcategoryDTO createSubcategory(SubcategoryRequest subcategoryRequest) {
-
+    public SubcategoryDTO createSubcategory(SubcategoryRequest subcategoryRequest, MultipartFile multipartFile) {
+        // Verificar si la categoría existe
         categoryService.verifyCategoryExists(subcategoryRequest.getCategory_id());
+
+        // Guardar la imagen y obtener solo el nombre del archivo
+        saveImage(subcategoryRequest, multipartFile);
+
+        // Convertir la solicitud en entidad y guardar
         Subcategory subcategoryEntity = convertSubcategory.convertSubcategoryRequestToSubcategoryEntity(subcategoryRequest);
         Subcategory savedSubcategory = subcategoryRepository.save(subcategoryEntity);
 
+        // Devolver DTO sin la URL completa de la imagen
         return convertSubcategory.convertSubcategoryEntityToSubcategoryDTO(savedSubcategory);
     }
 
     @Override
+    public void saveImage(SubcategoryRequest subcategoryRequest, MultipartFile imageFile) {
+        // Guardar la imagen utilizando el servicio de almacenamiento y obtener el nombre del archivo
+        String imagePath = imageStorage.saveImage(imageFile);
+
+        // Extraer solo el nombre del archivo de la ruta completa
+        String imageName = Paths.get(imagePath).getFileName().toString();
+
+        // Asignar el nombre de la imagen al subcategoryRequest
+        subcategoryRequest.setImage(imageName);
+    }
+
+
+
+
+    @Override
     public Optional<SubcategoryDTO> getSubcategoryById(Long id) {
         return subcategoryRepository.findById(id)
-                .map(subcategory -> Optional.of(convertSubcategory.convertSubcategoryEntityToSubcategoryDTO(subcategory)))
+                .map(subcategory -> {
+                    // Convertir la entidad en DTO
+                    SubcategoryDTO subcategoryDTO = convertSubcategory.convertSubcategoryEntityToSubcategoryDTO(subcategory);
+
+                    // Crear la URL completa de la imagen
+                    String imageUrl = "http://localhost:8080/images/" + subcategory.getImage();
+
+                    // Establecer la URL de la imagen en el DTO
+                    subcategoryDTO.setImage(imageUrl);
+
+                    // Retornar el DTO con la URL de la imagen
+                    return Optional.of(subcategoryDTO);
+                })
                 .orElseThrow(() -> new RuntimeException("Subcategory not found"));
     }
+
 
     @Override
     public Optional<SubcategoryDTO> updateSubcategory(Long id, SubcategoryRequest subcategoryRequest) {
@@ -79,8 +120,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         subcategoryRepository.deleteById(id);
     }
 
-    @Override
-    public String saveImage(MultipartFile imageFile) {
-        return imageStorage.saveImage(imageFile); // Delegar el guardado de la imagen al servicio de almacenamiento
-    }
+
+
 }
