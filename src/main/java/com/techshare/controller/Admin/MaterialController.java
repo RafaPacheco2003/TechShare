@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/admin/material")
@@ -15,9 +16,10 @@ public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody MaterialRequest materialRequest) {
-        MaterialDTO materialDTO = materialService.createMaterial(materialRequest);
+    @PostMapping(value = "/save", consumes = "multipart/form-data")
+    public ResponseEntity<?> create(@RequestPart("material") MaterialRequest materialRequest,
+                                    @RequestPart("image")MultipartFile multipartFile) {
+        MaterialDTO materialDTO = materialService.createMaterial(materialRequest, multipartFile);
         return new ResponseEntity<>(materialDTO, HttpStatus.CREATED);
     }
 

@@ -108,9 +108,22 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Override
     public List<SubcategoryDTO> getAllSubcategories() {
         return subcategoryRepository.findAll().stream()
-                .map(convertSubcategory::convertSubcategoryEntityToSubcategoryDTO)
+                .map(subcategory -> {
+                    // Convertir la entidad en DTO
+                    SubcategoryDTO subcategoryDTO = convertSubcategory.convertSubcategoryEntityToSubcategoryDTO(subcategory);
+
+                    // Crear la URL completa de la imagen
+                    String imageUrl = "http://localhost:8080/images/" + subcategory.getImage();
+
+                    // Establecer la URL de la imagen en el DTO
+                    subcategoryDTO.setImage(imageUrl);
+
+                    // Retornar el DTO con la URL de la imagen
+                    return subcategoryDTO;
+                })
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public void deleteSubcategory(Long id) {

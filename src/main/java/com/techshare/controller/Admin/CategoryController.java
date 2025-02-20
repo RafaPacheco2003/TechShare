@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -17,9 +18,10 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody CategoryRequest categoryRequest) {
-        return new ResponseEntity<>(categoryService.create(categoryRequest), HttpStatus.CREATED);
+    @PostMapping(value = "/save", consumes = "multipart/form-data")
+    public ResponseEntity<?> create(@RequestPart("category") CategoryRequest categoryRequest,
+                                    @RequestPart("image") MultipartFile multipartFile) {
+        return new ResponseEntity<>(categoryService.create(categoryRequest, multipartFile), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

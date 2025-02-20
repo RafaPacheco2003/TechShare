@@ -27,6 +27,7 @@ public class ImageStorageImpl implements ImageStorage {
 
     @Override
     public String saveImage(MultipartFile multipartFile) {
+        //imageValidator.validateImage(multipartFile);
         Path path = Paths.get(storageLocation, multipartFile.getOriginalFilename());
         try {
             Files.createDirectories(path.getParent());
