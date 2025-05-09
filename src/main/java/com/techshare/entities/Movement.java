@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 public class Movement {
 
@@ -17,13 +19,16 @@ public class Movement {
 
     private String comment;
 
+    @Column(name = "date", nullable = false, updatable = false)
     @Temporal(TemporalType.DATE)
+    @CreationTimestamp
     private Date date;
-/*
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
-*/
+    /*
+     * @ManyToOne
+     * 
+     * @JoinColumn(name = "usuario_id")
+     * private Usuario usuario;
+     */
     @ManyToOne
     @JoinColumn(name = "material_id")
     private Material material;

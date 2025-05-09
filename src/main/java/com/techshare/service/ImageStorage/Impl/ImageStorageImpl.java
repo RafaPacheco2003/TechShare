@@ -1,4 +1,4 @@
-package com.techshare.service.ImageStorage.Impl;
+package com.techshare.service.ImageStorage.impl;
 
 import com.techshare.service.ImageStorage.ImageStorage;
 import com.techshare.service.ImageValidator.ImageValidator;

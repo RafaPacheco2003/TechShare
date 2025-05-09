@@ -1,6 +1,6 @@
-package com.techshare.service.RecoverPassword;
+package com.techshare.service.AccountVerification;
 
-public interface RecoverPasswordService {
+public interface AccountVerificationService {
 
-    void recoverPassword(String email);
+    void verificationAccount(String email);
 }

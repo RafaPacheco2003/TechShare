@@ -1,5 +1,8 @@
 package com.techshare.entities;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,8 +20,21 @@ public class Material {
     private Subcategory subcategory;
     private Double price;
     private String image;
-    //private Usuario usario; //Aun no se implementa hasta el security
+    // private Usuario usario; //Aun no se implementa hasta el security
 
+
+    // Relación muchos a muchos con Membership
+    @ManyToMany(mappedBy = "restrictedMaterials")
+    private Set<Membership> requiredMemberships = new HashSet<>();
+
+    
+    public Set<Membership> getRequiredMemberships() {
+        return requiredMemberships;
+    }
+
+    public void setRequiredMemberships(Set<Membership> requiredMemberships) {
+        this.requiredMemberships = requiredMemberships;
+    }
 
     public Long getMaterial_id() {
         return material_id;

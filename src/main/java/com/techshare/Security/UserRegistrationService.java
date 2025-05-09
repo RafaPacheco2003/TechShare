@@ -1,55 +1,47 @@
 package com.techshare.Security;
 
-import com.techshare.entities.RoleEntity;
-import com.techshare.entities.RoleEnum;
+import com.techshare.convert.User.UserRequestConverter;
 import com.techshare.entities.UserEntity;
 import com.techshare.http.request.RegisterUserRequest;
-import com.techshare.repositories.RoleRepository;
 import com.techshare.repositories.UserRepository;
+import com.techshare.service.AccountVerification.AccountVerificationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+
 public class UserRegistrationService {
 
     @Autowired
-    private UserRepository userRepository;
-
+    private  UserRepository userRepository;
     @Autowired
-    private RoleRepository roleRepository;
-
+    private  UserRequestConverter userRequestConverter;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private  AccountVerificationService accountVerificationService;
 
+
+    @Transactional
     public UserEntity registerUser(RegisterUserRequest request) {
-        // Verificar si el usuario ya existe
-        if (userRepository.findUserEntityByUsername(request.getUsername()).isPresent()) {
+        // Verificar usuario existente
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("El usuario ya existe");
         }
 
-        // Crear un nuevo usuario
-        UserEntity user = new UserEntity();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setEnabled(true);
-        user.setAccountNoExpired(true);
-        user.setCredentialNoExpired(true);
-        user.setAccountNoLocked(true);
+        // Convertir y guardar usuario
+        UserEntity user = userRequestConverter.convert(request);
+        UserEntity savedUser = userRepository.save(user);
 
-        // Asignar roles al usuario
-        Set<RoleEntity> roles = new HashSet<>();
-        for (String roleName : request.getRoles()) {
-            RoleEntity role = roleRepository.findByRoleEnum(RoleEnum.valueOf(roleName))
-                    .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + roleName));
-            roles.add(role);
+        try {
+            accountVerificationService.verificationAccount(savedUser.getUsername());
+            return savedUser;
+        } catch (Exception e) {
+
+            throw new RuntimeException("Usuario registrado, pero no se pudo enviar el correo de verificación. Contacta al administrador.");
+
+            // Opción 2: Para desarrollo, puedes devolver el usuario igual
+            // return savedUser;
         }
-        user.setRoles(roles);
-
-        // Guardar el usuario en la base de datos
-        return userRepository.save(user);
     }
 }

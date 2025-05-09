@@ -1,16 +1,16 @@
-package com.techshare.service.RecoverPassword.impl;
+package com.techshare.service.AccountVerification.impl;
 
 import com.techshare.entities.UserEntity;
 import com.techshare.repositories.UserRepository;
 import com.techshare.service.Email.EmailService;
-import com.techshare.service.RecoverPassword.RecoverPasswordService;
+import com.techshare.service.AccountVerification.AccountVerificationService;
 import com.techshare.service.Token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RecoveryPasswordServiceImpl implements RecoverPasswordService {
+public class AccountVerificationServiceImpl implements AccountVerificationService {
 
     @Autowired
     private UserRepository userRepository;
@@ -20,12 +20,23 @@ public class RecoveryPasswordServiceImpl implements RecoverPasswordService {
     private EmailService emailService;
 
     @Override
-    public void recoverPassword(String email) {
+    public void verificationAccount(String email) {
+        try {
+            UserEntity user = userRepository.findUserEntityByUsername(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        UserEntity userEntity= userRepository.findUserEntityByUsername(email)
-                .orElseThrow(()-> new UsernameNotFoundException("User not found"));
+            // Verificar si la cuenta ya está activada
+            if (user.isEnabled()) {
+                throw new RuntimeException("La cuenta ya está verificada");
+            }
 
-        String token = tokenService.generateToken(userEntity);
+            String token = tokenService.generateToken(user);
+            emailService.sendVerificationRegister(email, token);
 
+        } catch (RuntimeException e) {
+            throw e; // Re-lanzar estas excepciones específicas
+        } catch (Exception e) {
+            throw new RuntimeException("Error en el proceso de verificación. Recuerda que el enlace es válido solo por 5 minutos.", e);
+        }
     }
 }

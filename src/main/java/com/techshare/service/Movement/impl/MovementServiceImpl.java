@@ -1,4 +1,4 @@
-package com.techshare.service.Movement;
+package com.techshare.service.Movement.impl;
 import com.techshare.DTO.MovementDTO;
 import com.techshare.convert.Movement.ConvertMovement;
 import com.techshare.entities.Material;
@@ -8,9 +8,11 @@ import com.techshare.http.request.MovementRequest;
 import com.techshare.repositories.MaterialRepository;
 import com.techshare.repositories.MovementRepository;
 import com.techshare.service.Movement.MovementService;
-import com.techshare.service.movementProcessor.MovementProcessor;
+import com.techshare.service.MovementProcessor.MovementProcessor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -20,14 +22,9 @@ import java.util.stream.Collectors;
 @Service
 public class MovementServiceImpl implements MovementService {
 
-
     private final MovementRepository movementRepository;
-
-
     private final MaterialRepository materialRepository;
-
     private final ConvertMovement convertMovement;
-
     private final Map<MoveType, MovementProcessor> movementProcessorMap;
 
     @Autowired
@@ -41,10 +38,15 @@ public class MovementServiceImpl implements MovementService {
         this.convertMovement = convertMovement;
         this.movementProcessorMap = movementProcessorMap;
     }
+    
     @Override
+    @Transactional
     public MovementDTO createMovement(MovementRequest movementRequest) {
+        // Verificar si el material existe
+        Material material = materialRepository.findById(movementRequest.getMaterial_id())
+                .orElseThrow(() -> new RuntimeException("Material con ID " + movementRequest.getMaterial_id() + " no encontrado"));
+        
         Movement movementEntity = convertMovement.convertMovementRequestToMovementEntity(movementRequest);
-        Material material = materialRepository.getById(movementRequest.getMaterial_id());
 
         // Obtenemos el procesador adecuado según el tipo de movimiento
         MovementProcessor processor = movementProcessorMap.get(movementEntity.getMoveType());
@@ -61,23 +63,35 @@ public class MovementServiceImpl implements MovementService {
         return convertMovement.convertMovementEntityToMovementDTO(savedMovement);
     }
 
-
     @Override
     public Optional<MovementDTO> getMovementById(Long id) {
         return movementRepository.findById(id)
-                .map(movement -> Optional.of(convertMovement.convertMovementEntityToMovementDTO(movement)))
-                .orElseThrow(() -> new RuntimeException("Movement not found"));
+                .map(convertMovement::convertMovementEntityToMovementDTO)
+                .map(Optional::of)
+                .orElseThrow(() -> new RuntimeException("Movimiento con ID " + id + " no encontrado"));
     }
 
     @Override
+    @Transactional
     public Optional<MovementDTO> updateMovement(Long id, MovementRequest movementRequest) {
-        return movementRepository.findById(id)
-                .map(existingMovement -> {
-                    convertMovement.convertUpdateMovementRequestToMovement(movementRequest, existingMovement);
-                    Movement updatedMovement = movementRepository.save(existingMovement);
-                    return Optional.of(convertMovement.convertMovementEntityToMovementDTO(updatedMovement));
-                })
-                .orElseThrow(() -> new RuntimeException("Movement not found"));
+        // Verificar si el movimiento existe
+        Movement existingMovement = movementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Movimiento con ID " + id + " no encontrado"));
+        
+        // Si el movimiento cambia de material, verificar que el nuevo material existe
+        if (movementRequest.getMaterial_id() != null && 
+            (existingMovement.getMaterial() == null || 
+             !existingMovement.getMaterial().getMaterial_id().equals(movementRequest.getMaterial_id()))) {
+            
+            materialRepository.findById(movementRequest.getMaterial_id())
+                .orElseThrow(() -> new RuntimeException("Material con ID " + movementRequest.getMaterial_id() + " no encontrado"));
+        }
+        
+        // Actualizar el movimiento
+        convertMovement.convertUpdateMovementRequestToMovement(movementRequest, existingMovement);
+        Movement updatedMovement = movementRepository.save(existingMovement);
+        
+        return Optional.of(convertMovement.convertMovementEntityToMovementDTO(updatedMovement));
     }
 
     @Override
@@ -88,9 +102,10 @@ public class MovementServiceImpl implements MovementService {
     }
 
     @Override
+    @Transactional
     public void deleteMovement(Long id) {
         if (!movementRepository.existsById(id)) {
-            throw new RuntimeException("Movement not found");
+            throw new RuntimeException("Movimiento con ID " + id + " no encontrado");
         }
         movementRepository.deleteById(id);
     }

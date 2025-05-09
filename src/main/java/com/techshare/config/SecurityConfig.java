@@ -47,10 +47,14 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults()) // Opcional: puedes comentar esta línea si no necesitas autenticación básica
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Configurar sesiones sin estado
                 .authorizeHttpRequests(http -> {
-                    // Permitir acceso a todos los endpoints sin autenticación
-                    http.anyRequest().permitAll();
+                    // Permitir acceso a endpoints de autenticación sin requerir autenticación
+                    http.requestMatchers("/auth/login", "/auth/register", "/auth/verify-account").permitAll()
+                        // Configurar acceso específico para el dashboard (solo ADMIN)
+                        .requestMatchers("/dashboard/**").hasRole("ADMIN")
+                        // Requerir autenticación para todos los demás endpoints
+                        .anyRequest().authenticated();
                 })
-                //.addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class) // Comentar o eliminar esta línea
+                .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class) // Descomentado para validar tokens JWT
                 .build();
     }
 

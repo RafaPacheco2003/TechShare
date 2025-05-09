@@ -1,4 +1,4 @@
-package com.techshare.service.movementProcessor;
+package com.techshare.service.MovementProcessor;
 
 import com.techshare.entities.Material;
 import com.techshare.http.request.MovementRequest;

@@ -1,9 +1,10 @@
 package com.techshare.config;
 import com.techshare.entities.MoveType;
-import com.techshare.service.movementProcessor.AdjustMovement;
-import com.techshare.service.movementProcessor.InMovement;
-import com.techshare.service.movementProcessor.MovementProcessor;
-import com.techshare.service.movementProcessor.OutMovement;
+import com.techshare.service.MovementProcessor.AdjustMovement;
+import com.techshare.service.MovementProcessor.InMovement;
+import com.techshare.service.MovementProcessor.MovementProcessor;
+import com.techshare.service.MovementProcessor.OutMovement;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.util.Map;
