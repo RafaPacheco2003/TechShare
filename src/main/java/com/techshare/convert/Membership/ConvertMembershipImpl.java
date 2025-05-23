@@ -1,7 +1,7 @@
 package com.techshare.convert.Membership;
 
 import org.springframework.stereotype.Service;
-
+import java.util.stream.Collectors;
 import com.techshare.DTO.MembershipDTO;
 import com.techshare.entities.Membership;
 import com.techshare.http.request.MembershipRequest;
@@ -14,15 +14,16 @@ public class ConvertMembershipImpl implements ConvertMembership {
         Membership membership = new Membership();
         membership.setName(membershipRequest.name());
         membership.setDescription(membershipRequest.description());
+        
         membership.setDefaultDurationDays(membershipRequest.defaultDurationDays());
         return membership;
     }
 
     @Override
-    public void convertUpdateMembershipRequestToMembership(MembershipRequest membershipRequest,
-            Membership existingMembership) {
+    public void convertUpdateMembershipRequestToMembership(MembershipRequest membershipRequest, Membership existingMembership) {
         existingMembership.setName(membershipRequest.name());
         existingMembership.setDescription(membershipRequest.description());
+        
         existingMembership.setDefaultDurationDays(membershipRequest.defaultDurationDays());
     }
 
@@ -32,7 +33,18 @@ public class ConvertMembershipImpl implements ConvertMembership {
         membershipDTO.setMembership_id(membership.getMembership_id());
         membershipDTO.setName(membership.getName());
         membershipDTO.setDescription(membership.getDescription());
+        
         membershipDTO.setDefaultDurationDays(membership.getDefaultDurationDays());
+        
+        // Convert associated materials
+        if (membership.getMaterials() != null) {
+            membershipDTO.setMaterialIds(
+                membership.getMaterials().stream()
+                    .map(material -> material.getMaterial_id())
+                    .collect(Collectors.toSet())
+            );
+        }
+        
         return membershipDTO;
     }
 

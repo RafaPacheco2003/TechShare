@@ -1,18 +1,38 @@
 package com.techshare.DTO;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MembershipDTO {
 
     private Long membership_id;
-    
     private String name;
-    
     private String description;
-   
     private Integer defaultDurationDays;
+    private Integer percentage;
 
-
+    // Puedes agregar esto si quieres retornar los IDs o nombres de los usuarios asociados
+    private Set<String> userNames; // o Set<Long> userIds;
+    private Set<Long> materialIds = new HashSet<>(); // Added for material relationship
 
     // Getters y setters
+
+    public Set<Long> getMaterialIds() {
+        return materialIds;
+    }
+
+    public void setMaterialIds(Set<Long> materialIds) {
+        this.materialIds = materialIds;
+    }
+
+    public Integer getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(Integer percentage) {
+        this.percentage = percentage;
+    }
+
     public Long getMembership_id() {
         return membership_id;
     }
@@ -37,8 +57,6 @@ public class MembershipDTO {
         this.description = description;
     }
 
-    
-
     public Integer getDefaultDurationDays() {
         return defaultDurationDays;
     }
@@ -47,6 +65,11 @@ public class MembershipDTO {
         this.defaultDurationDays = defaultDurationDays;
     }
 
-    
-    
+    public Set<String> getUserNames() {
+        return userNames;
+    }
+
+    public void setUserNames(Set<String> userNames) {
+        this.userNames = userNames;
+    }
 }

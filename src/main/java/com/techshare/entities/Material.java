@@ -20,21 +20,10 @@ public class Material {
     private Subcategory subcategory;
     private Double price;
     private String image;
-    // private Usuario usario; //Aun no se implementa hasta el security
 
-
-    // Relación muchos a muchos con Membership
-    @ManyToMany(mappedBy = "restrictedMaterials")
-    private Set<Membership> requiredMemberships = new HashSet<>();
-
-    
-    public Set<Membership> getRequiredMemberships() {
-        return requiredMemberships;
-    }
-
-    public void setRequiredMemberships(Set<Membership> requiredMemberships) {
-        this.requiredMemberships = requiredMemberships;
-    }
+    @ManyToOne
+    @JoinColumn(name = "membership_id")
+    private Membership membership;
 
     public Long getMaterial_id() {
         return material_id;
@@ -98,5 +87,13 @@ public class Material {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Membership getMembership() {
+        return membership;
+    }
+
+    public void setMembership(Membership membership) {
+        this.membership = membership;
     }
 }

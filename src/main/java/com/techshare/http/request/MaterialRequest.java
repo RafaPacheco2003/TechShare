@@ -1,14 +1,16 @@
 package com.techshare.http.request;
 
-public class MaterialRequest{
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
+public class MaterialRequest {
     private String name;
     private String descripcion;
     private Integer stock;
     private Long subcategory;
-    private Double priece;
+    private Double price;
     private String image;
-
+    private Long membership_id;
 
     public String getName() {
         return name;
@@ -42,12 +44,12 @@ public class MaterialRequest{
         this.subcategory = subcategory;
     }
 
-    public Double getPriece() {
-        return priece;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setPriece(Double priece) {
-        this.priece = priece;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getImage() {
@@ -56,5 +58,13 @@ public class MaterialRequest{
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Long getMembership_id() {
+        return membership_id;
+    }
+
+    public void setMembership_id(Long membership_id) {
+        this.membership_id = membership_id;
     }
 }

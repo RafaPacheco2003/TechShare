@@ -44,24 +44,41 @@ public class UserEntity {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-    // Un usuario puede tener solo una membresía activa a la vez
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<UserMembership> membershipHistory = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "membership_id")
+    private Membership membership;
 
-    // Método para obtener la membresía activa actual
-    public UserMembership getActiveMembership() {
-        return membershipHistory.stream()
-                .filter(UserMembership::isActive)
-                .findFirst()
-                .orElse(null);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public Membership getMembership() {
+        return membership;
     }
 
-    public Set<UserMembership> getMembershipHistory() {
-        return membershipHistory;
-    }
-
-    public void setMembershipHistory(Set<UserMembership> membershipHistory) {
-        this.membershipHistory = membershipHistory;
+    public void setMembership(Membership membership) {
+        this.membership = membership;
     }
 
     public Long getUser_id() {
