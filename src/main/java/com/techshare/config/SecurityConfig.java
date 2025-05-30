@@ -1,6 +1,8 @@
 package com.techshare.config;
 
 import com.techshare.Security.UserDetailServiceImpl;
+import com.techshare.Security.OAuth2SuccessHandler;
+import com.techshare.Security.OAuth2FailureHandler;
 import com.techshare.config.filter.JwtTokenValidator;
 import com.techshare.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -35,6 +39,12 @@ public class SecurityConfig {
 
     @Autowired
     private JwtUtils jwtUtils;
+    
+    @Autowired
+    private OAuth2SuccessHandler oAuth2SuccessHandler;
+
+    @Autowired
+    private OAuth2FailureHandler oAuth2FailureHandler;
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
@@ -43,19 +53,47 @@ public class SecurityConfig {
         logger.info("Configurando filtros de seguridad");
 
         return httpSecurity
-                .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
-                .httpBasic(Customizer.withDefaults()) // Opcional: puedes comentar esta línea si no necesitas autenticación básica
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Configurar sesiones sin estado
+                .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
+                .sessionManagement(session -> 
+                    session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(http -> {
-                    // Permitir acceso a endpoints de autenticación sin requerir autenticación
-                    http.requestMatchers("/auth/login", "/auth/register", "/auth/verify-account").permitAll()
-                        // Configurar acceso específico para el dashboard (solo ADMIN)
+                    logger.info("Configurando rutas permitidas");
+                    http.requestMatchers(
+                            "/auth/login", 
+                            "/auth/register", 
+                            "/auth/verify-account",
+                            "/oauth2/authorization/**",
+                            "/oauth2/login/google",
+                            "/oauth2/success",
+                            "/oauth2/error",
+                            "/login/oauth2/code/*"
+                        ).permitAll()
                         .requestMatchers("/dashboard/**").hasRole("ADMIN")
-                        // Requerir autenticación para todos los demás endpoints
                         .anyRequest().authenticated();
                 })
-                .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class) // Descomentado para validar tokens JWT
+                .oauth2Login(oauth2 -> {
+                    logger.info("Configurando OAuth2 login");
+                    oauth2
+                        .authorizationEndpoint()
+                            .baseUri("/oauth2/authorization")
+                        .and()
+                        .redirectionEndpoint()
+                            .baseUri("/login/oauth2/code/*")
+                        .and()
+                        .userInfoEndpoint()
+                            .userService(oauth2UserService())
+                        .and()
+                        .successHandler(oAuth2SuccessHandler)
+                        .failureHandler(oAuth2FailureHandler);
+                })
+                .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public DefaultOAuth2UserService oauth2UserService() {
+        return new DefaultOAuth2UserService();
     }
 
     @Bean

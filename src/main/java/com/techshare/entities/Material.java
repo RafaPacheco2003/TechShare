@@ -22,8 +22,11 @@ public class Material {
     private String image;
 
     @ManyToOne
-    @JoinColumn(name = "membership_id")
-    private Membership membership;
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    @Column(name = "title")
+    private String title;
 
     public Long getMaterial_id() {
         return material_id;
@@ -89,11 +92,15 @@ public class Material {
         this.image = image;
     }
 
-    public Membership getMembership() {
-        return membership;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setMembership(Membership membership) {
-        this.membership = membership;
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

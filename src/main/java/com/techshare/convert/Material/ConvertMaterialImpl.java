@@ -1,62 +1,46 @@
 package com.techshare.convert.Material;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Component;
 import com.techshare.DTO.MaterialDTO;
 import com.techshare.entities.Material;
-import com.techshare.entities.Membership;
 import com.techshare.http.request.MaterialRequest;
-import com.techshare.repositories.MembershipRepository;
-import com.techshare.repositories.SubcategoryRepository;
+import com.techshare.repositories.UserRepository;
 
-@Service
+@Component
 public class ConvertMaterialImpl implements ConvertMaterial {
 
     @Autowired
-    private SubcategoryRepository subcategoryRepository;
-
-    @Autowired
-    private MembershipRepository membershipRepository;
+    private UserRepository userRepository;
 
     @Override
     public Material convertMaterialRequestToMaterial(MaterialRequest materialRequest) {
         Material material = new Material();
         material.setName(materialRequest.getName());
-        material.setDescripcion(materialRequest.getDescripcion());
+        material.setDescripcion(materialRequest.getDescription());
         material.setStock(materialRequest.getStock());
         material.setPrice(materialRequest.getPrice());
         material.setImage(materialRequest.getImage());
         
-        if (materialRequest.getSubcategory() != null) {
-            material.setSubcategory(subcategoryRepository.findById(materialRequest.getSubcategory())
-                    .orElse(null));
+        if (materialRequest.getUser_id() != null) {
+            material.setUser(userRepository.findById(materialRequest.getUser_id())
+                    .orElseThrow(() -> new RuntimeException("User not found")));
         }
-
-        if (materialRequest.getMembership_id() != null) {
-            material.setMembership(membershipRepository.findById(materialRequest.getMembership_id())
-                    .orElse(null));
-        }
-
+        
         return material;
     }
 
     @Override
     public void convertUpdateMaterialRequestToMaterial(MaterialRequest materialRequest, Material existingMaterial) {
         existingMaterial.setName(materialRequest.getName());
-        existingMaterial.setDescripcion(materialRequest.getDescripcion());
+        existingMaterial.setDescripcion(materialRequest.getDescription());
         existingMaterial.setStock(materialRequest.getStock());
         existingMaterial.setPrice(materialRequest.getPrice());
         existingMaterial.setImage(materialRequest.getImage());
         
-        if (materialRequest.getSubcategory() != null) {
-            existingMaterial.setSubcategory(subcategoryRepository.findById(materialRequest.getSubcategory())
-                    .orElse(null));
-        }
-
-        if (materialRequest.getMembership_id() != null) {
-            existingMaterial.setMembership(membershipRepository.findById(materialRequest.getMembership_id())
-                    .orElse(null));
+        if (materialRequest.getUser_id() != null) {
+            existingMaterial.setUser(userRepository.findById(materialRequest.getUser_id())
+                    .orElseThrow(() -> new RuntimeException("User not found")));
         }
     }
 
@@ -70,14 +54,10 @@ public class ConvertMaterialImpl implements ConvertMaterial {
         materialDTO.setPrice(material.getPrice());
         materialDTO.setImage(material.getImage());
         
-        if (material.getSubcategory() != null) {
-            materialDTO.setSubcategory(material.getSubcategory().getSubcategory_id());
+        if (material.getUser() != null) {
+            materialDTO.setUser_id(material.getUser().getUser_id());
         }
-
-        if (material.getMembership() != null) {
-            materialDTO.setMembership_id(material.getMembership().getMembership_id());
-        }
-
+        
         return materialDTO;
     }
 }

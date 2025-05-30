@@ -23,6 +23,7 @@ public class UserEntity {
 
     @Column(unique = true)
     private String username;
+    @Column(name = "password")
     private String password;
 
     private String firstName;
@@ -44,42 +45,8 @@ public class UserEntity {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "membership_id")
-    private Membership membership;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public Membership getMembership() {
-        return membership;
-    }
-
-    public void setMembership(Membership membership) {
-        this.membership = membership;
-    }
+    @Column(name = "role")
+    private String role;
 
     public Long getUser_id() {
         return user_id;
@@ -159,5 +126,13 @@ public class UserEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

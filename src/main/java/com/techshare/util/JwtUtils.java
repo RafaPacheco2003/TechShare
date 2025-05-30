@@ -76,4 +76,20 @@ public class JwtUtils {
         return decodedJWT.getClaims();
     }
 
+
+    // Generar token JWT para OAuth2
+    public String generateToken(String email) {
+        Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
+
+        return JWT.create()
+                .withIssuer(this.userGenerator)
+                .withSubject(email)
+                .withClaim("authorities", "ROLE_USER") // Por defecto asignamos ROLE_USER
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1800000)) // 30 minutos
+                .withJWTId(UUID.randomUUID().toString())
+                .withNotBefore(new Date(System.currentTimeMillis()))
+                .sign(algorithm);
+    }
+
 }

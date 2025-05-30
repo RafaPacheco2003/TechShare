@@ -5,12 +5,12 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 public class MaterialRequest {
     private String name;
-    private String descripcion;
+    private String description;
     private Integer stock;
     private Long subcategory;
     private Double price;
     private String image;
-    private Long membership_id;
+    private Long user_id;
 
     public String getName() {
         return name;
@@ -20,12 +20,12 @@ public class MaterialRequest {
         this.name = name;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getStock() {
@@ -60,11 +60,11 @@ public class MaterialRequest {
         this.image = image;
     }
 
-    public Long getMembership_id() {
-        return membership_id;
+    public Long getUser_id() {
+        return user_id;
     }
 
-    public void setMembership_id(Long membership_id) {
-        this.membership_id = membership_id;
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 }
