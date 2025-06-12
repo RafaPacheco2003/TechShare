@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false)
-        );
+        ); 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
     

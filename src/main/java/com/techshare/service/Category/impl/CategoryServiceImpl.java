@@ -69,21 +69,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDTO> getAllCategories() {
-        return categoryRepository.findAll().stream()
-                .map(category -> {
-                    CategoryDTO categoryDTO= convertCategory.convertCategoryToCategoryDTO(category);
-                    // Crear la URL completa de la imagen
-                    String imageUrl = "http://localhost:8080/images/" + category.getImage();
-
-                    // Establecer la URL de la imagen en el DTO
-                    categoryDTO.setImage(imageUrl);
-
-                    // Retornar el DTO con la URL de la imagen
-                    return categoryDTO;
-                })
-                .collect(Collectors.toList());
-    }
+public List<CategoryDTO> getAllCategories() {
+    return categoryRepository.findAll().stream()
+            .sorted((c1, c2) -> c2.getCategory_id().compareTo(c1.getCategory_id()))  // Orden descendente
+            .map(category -> {
+                CategoryDTO categoryDTO = convertCategory.convertCategoryToCategoryDTO(category);
+                String imageUrl = "http://localhost:8080/images/" + category.getImage();
+                categoryDTO.setImage(imageUrl);
+                return categoryDTO;
+            })
+            .collect(Collectors.toList());
+}
 
     @Override
     public void deleteCategory(Long id) {

@@ -25,8 +25,8 @@ public class MovementDTO {
         @ManyToOne
         @JoinColumn(name = "usuario_id")
         private Usuario usuario;
-    */
-    private Long material_id;
+    */    private Long material_id;
+    private String material_name;
 
     public Long getMovement_id() {
         return movement_id;
@@ -70,9 +70,15 @@ public class MovementDTO {
 
     public Long getMaterial_id() {
         return material_id;
+    }    public void setMaterial_id(Long material_id) {
+        this.material_id = material_id;
     }
 
-    public void setMaterial_id(Long material_id) {
-        this.material_id = material_id;
+    public String getMaterial_name() {
+        return material_name;
+    }
+
+    public void setMaterial_name(String material_name) {
+        this.material_name = material_name;
     }
 }

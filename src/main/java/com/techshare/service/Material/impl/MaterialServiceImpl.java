@@ -2,10 +2,13 @@ package com.techshare.service.Material.impl;
 
 import com.techshare.DTO.MaterialDTO;
 import com.techshare.convert.Material.ConvertMaterial;
-import com.techshare.entities.Material;// Nueva excepción personalizada
+import com.techshare.entities.Material;
+import com.techshare.entities.Subcategory;
 import com.techshare.http.request.MaterialRequest;
 import com.techshare.repositories.MaterialRepository;
-import com.techshare.service.ImageStorage.ImageStorage;  // Servicio para manejar las imágenes
+import com.techshare.repositories.SubcategoryRepository;
+import com.techshare.service.Category.CategoryService;
+import com.techshare.service.ImageStorage.ImageStorage;
 import com.techshare.service.Material.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,12 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Autowired
     private MaterialRepository materialRepository;
+
+    @Autowired
+    private SubcategoryRepository subcategoryRepository;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private ImageStorage imageStorage;  // Autowired del servicio de imágenes
@@ -98,5 +107,35 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Asignar el nombre de la imagen al materialRequest
         materialRequest.setImage(imageName);
+    }
+
+    @Override
+    public List<MaterialDTO> getMaterialsByCategory(Long categoryId) {
+        // Verify if category exists, this will throw CategoryNotFoundException if not found
+        categoryService.verifyCategoryExists(categoryId);
+        
+        // Get all subcategories for the given category
+        List<Subcategory> subcategories = subcategoryRepository.findByCategoryId(categoryId);
+        
+        // Extract subcategory IDs
+        List<Long> subcategoryIds = subcategories.stream()
+                .map(Subcategory::getSubcategory_id)
+                .collect(Collectors.toList());
+        
+        // If no subcategories found, return empty list
+        if (subcategoryIds.isEmpty()) {
+            return List.of();
+        }
+        
+        // Get all materials for these subcategories
+        return materialRepository.findBySubcategoryIds(subcategoryIds).stream()
+                .map(material -> {
+                    MaterialDTO materialDTO = convertMaterial.convertMaterialToMaterialDTO(material);
+                    // Crear URL de la imagen
+                    String imageUrl = "http://localhost:8080/images/" + material.getImage();
+                    materialDTO.setImage(imageUrl);
+                    return materialDTO;
+                })
+                .collect(Collectors.toList());
     }
 }

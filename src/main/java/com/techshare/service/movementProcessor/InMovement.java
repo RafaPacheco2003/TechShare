@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 @Component("inMovementProcessor")
 public class InMovement extends MovementProcessor{
 
-    @Override
-    public void applyMovement(Material material, MovementRequest movementRequest) {
+    @Override    public void applyMovement(Material material, MovementRequest movementRequest) {
         material.setStock(material.getStock() + movementRequest.getQuantity());
-        material.setBorrowable_stock(material.getBorrowable_stock() + movementRequest.getQuantity());
-
     }
 }

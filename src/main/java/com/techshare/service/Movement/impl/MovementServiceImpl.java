@@ -92,13 +92,10 @@ public class MovementServiceImpl implements MovementService {
         Movement updatedMovement = movementRepository.save(existingMovement);
         
         return Optional.of(convertMovement.convertMovementEntityToMovementDTO(updatedMovement));
-    }
-
-    @Override
-    public List<MovementDTO> getAllMovements() {
-        return movementRepository.findAll().stream()
-                .map(convertMovement::convertMovementEntityToMovementDTO)
-                .collect(Collectors.toList());
+    }    @Override    public org.springframework.data.domain.Page<MovementDTO> getAllMovements(int page, int size) {
+        org.springframework.data.domain.PageRequest pageRequest = org.springframework.data.domain.PageRequest.of(page, size);
+        return movementRepository.findAllByOrderByMovementIdDesc(pageRequest)
+                .map(convertMovement::convertMovementEntityToMovementDTO);
     }
 
     @Override

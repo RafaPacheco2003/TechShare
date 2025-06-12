@@ -1,12 +1,10 @@
 package com.techshare.DTO;
 
-public class MaterialDTO {
-    private Long material_id;
-    private String name;
+public class MaterialDTO {    private Long material_id;    private String name;
     private String description;
     private Integer stock;
-    private Integer borrowable_stock;
-    private Long subcategory;
+    private Long subcategory_id;
+    private String subcategory_name;
     private Double price;
     private String image;
     private String url;
@@ -42,22 +40,20 @@ public class MaterialDTO {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }    public Long getSubcategory_id() {
+        return subcategory_id;
     }
 
-    public Integer getBorrowable_stock() {
-        return borrowable_stock;
+    public void setSubcategory_id(Long subcategory_id) {
+        this.subcategory_id = subcategory_id;
     }
 
-    public void setBorrowable_stock(Integer borrowable_stock) {
-        this.borrowable_stock = borrowable_stock;
+    public String getSubcategory_name() {
+        return subcategory_name;
     }
 
-    public Long getSubcategory() {
-        return subcategory;
-    }
-
-    public void setSubcategory(Long subcategory) {
-        this.subcategory = subcategory;
+    public void setSubcategory_name(String subcategory_name) {
+        this.subcategory_name = subcategory_name;
     }
 
     public Double getPrice() {

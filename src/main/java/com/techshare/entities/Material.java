@@ -10,11 +10,9 @@ public class Material {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long material_id;
-    private String name;
+    private Long material_id;    private String name;
     private String descripcion;
     private Integer stock;
-    private Integer borrowable_stock;
     @ManyToOne
     @JoinColumn(name = "subcategory_id")
     private Subcategory subcategory;
@@ -54,18 +52,8 @@ public class Material {
 
     public Integer getStock() {
         return stock;
-    }
-
-    public void setStock(Integer stock) {
+    }    public void setStock(Integer stock) {
         this.stock = stock;
-    }
-
-    public Integer getBorrowable_stock() {
-        return borrowable_stock;
-    }
-
-    public void setBorrowable_stock(Integer borrowable_stock) {
-        this.borrowable_stock = borrowable_stock;
     }
 
     public Subcategory getSubcategory() {

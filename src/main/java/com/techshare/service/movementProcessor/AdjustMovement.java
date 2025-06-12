@@ -6,11 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component("adjustMovementProcessor")
 public class AdjustMovement extends MovementProcessor{
-    @Override
-    public void applyMovement(Material material, MovementRequest movementRequest) {
-        int oldStock = material.getStock();
+    @Override    public void applyMovement(Material material, MovementRequest movementRequest) {
         material.setStock(movementRequest.getQuantity());
-        int stockDifference = material.getStock() - oldStock;
-        material.setBorrowable_stock(material.getBorrowable_stock() + stockDifference);
     }
 }

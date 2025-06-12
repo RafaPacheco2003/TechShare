@@ -24,11 +24,10 @@ public class MovementController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody MovementRequest movementRequest){
         return new ResponseEntity<>(movementService.createMovement(movementRequest), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<MovementDTO>> findAllMovements(){
-        return new ResponseEntity<>(movementService.getAllMovements(), HttpStatus.OK);
+    }    @GetMapping("/all")
+    public ResponseEntity<org.springframework.data.domain.Page<MovementDTO>> findAllMovements(
+            @RequestParam(defaultValue = "0") int page) {
+        return new ResponseEntity<>(movementService.getAllMovements(page, 9), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

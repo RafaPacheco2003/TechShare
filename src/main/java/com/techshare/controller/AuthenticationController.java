@@ -9,6 +9,8 @@ import com.techshare.http.request.RegisterUserRequest;
 import com.techshare.http.response.AuthResponse;
 import com.techshare.service.AccountVerification.AccountVerificationService;
 import com.techshare.service.Token.TokenService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +32,17 @@ public class AuthenticationController {
     TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthLoginRequest authLoginRequest) {
-        return new ResponseEntity<>(this.userDetailService.loginUser(authLoginRequest), HttpStatus.OK);
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthLoginRequest authLoginRequest, HttpServletResponse response) {
+        AuthResponse authResponse = this.userDetailService.loginUser(authLoginRequest);
+        if (authResponse.jwt() != null) {
+            Cookie cookie = new Cookie("token", authResponse.jwt());
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(60 * 30); // 30 minutos
+            // cookie.setSecure(true); // Descomenta si usas HTTPS
+            response.addCookie(cookie);
+        }
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
 

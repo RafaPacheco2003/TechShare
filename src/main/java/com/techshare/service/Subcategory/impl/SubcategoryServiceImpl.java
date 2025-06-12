@@ -133,6 +133,16 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         subcategoryRepository.deleteById(id);
     }
 
-
-
+    @Override
+    public List<SubcategoryDTO> getSubcategoriesByCategory(Long categoryId) {
+        categoryService.verifyCategoryExists(categoryId);
+        return subcategoryRepository.findByCategoryId(categoryId).stream()
+                .map(subcategory -> {
+                    SubcategoryDTO subcategoryDTO = convertSubcategory.convertSubcategoryEntityToSubcategoryDTO(subcategory);
+                    String imageUrl = "http://localhost:8080/images/" + subcategory.getImage();
+                    subcategoryDTO.setImage(imageUrl);
+                    return subcategoryDTO;
+                })
+                .collect(Collectors.toList());
+    }
 }

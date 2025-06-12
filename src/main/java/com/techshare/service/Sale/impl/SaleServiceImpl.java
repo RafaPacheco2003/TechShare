@@ -9,16 +9,19 @@ import com.techshare.convert.Sale.ConvertSale;
 import com.techshare.entities.Sale;
 import com.techshare.entities.Material;
 import com.techshare.entities.UserEntity;
+import com.techshare.entities.MoveType;
 import com.techshare.entities.enums.SaleStatus;
 import com.techshare.exception.SaleNotFoundException;
 import com.techshare.exception.UserNotFoundException;
 import com.techshare.exception.InsufficientStockException;
 import com.techshare.http.request.SaleRequest;
 import com.techshare.http.request.SaleDetailRequest;
+import com.techshare.http.request.MovementRequest;
 import com.techshare.repositories.SaleRepository;
 import com.techshare.repositories.UserRepository;
 import com.techshare.repositories.MaterialRepository;
 import com.techshare.service.Sale.SaleService;
+import com.techshare.service.Movement.MovementService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +41,9 @@ public class SaleServiceImpl implements SaleService {
     @Autowired
     private ConvertSale convertSale;
 
+    @Autowired
+    private MovementService movementService;
+
     @Override
     @Transactional
     public SaleDTO createSale(SaleRequest saleRequest) {
@@ -56,18 +62,23 @@ public class SaleServiceImpl implements SaleService {
         Sale sale = convertSale.convertSaleRequestToSale(saleRequest);
         sale.setStatus(SaleStatus.COMPLETED);
         
-        // Actualizar stock de materiales
+        // Guardar la venta primero para tener el ID
+        sale = saleRepository.save(sale);
+
+        // Actualizar stock de materiales y crear registros de movimientos
         for (SaleDetailRequest detail : saleRequest.getDetails()) {
             Material material = materialRepository.findById(detail.getMaterial_id())
                     .orElseThrow(() -> new RuntimeException("Material not found with id: " + detail.getMaterial_id()));
             
-            // Actualizar el stock
-            material.setStock(material.getStock() - detail.getQuantity());
-            materialRepository.save(material);
+            // Crear movimiento de tipo SALE
+            MovementRequest movementRequest = new MovementRequest();
+            movementRequest.setMaterial_id(material.getMaterial_id());
+            movementRequest.setQuantity(detail.getQuantity());
+            movementRequest.setMoveType(MoveType.SALE);
+            movementRequest.setComment("Sale movement for sale ID: " + sale.getSale_id());
+            movementService.createMovement(movementRequest);
         }
         
-        // Guardar la venta
-        sale = saleRepository.save(sale);
         return convertSale.convertSaleToSaleDTO(sale);
     }
 
@@ -119,4 +130,4 @@ public class SaleServiceImpl implements SaleService {
             throw new RuntimeException("Invalid sale status: " + status + ". Valid values are: PENDING, COMPLETED, CANCELLED");
         }
     }
-} 
+}

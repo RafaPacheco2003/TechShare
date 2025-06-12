@@ -3,11 +3,10 @@ package com.techshare.http.request;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-public class MaterialRequest {
-    private String name;
+public class MaterialRequest {    private String name;
     private String description;
     private Integer stock;
-    private Long subcategory;
+    private Long subcategory_id;
     private Double price;
     private String image;
     private Long user_id;
@@ -34,14 +33,12 @@ public class MaterialRequest {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }    public Long getSubcategory_id() {
+        return subcategory_id;
     }
 
-    public Long getSubcategory() {
-        return subcategory;
-    }
-
-    public void setSubcategory(Long subcategory) {
-        this.subcategory = subcategory;
+    public void setSubcategory_id(Long subcategory_id) {
+        this.subcategory_id = subcategory_id;
     }
 
     public Double getPrice() {

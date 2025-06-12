@@ -56,38 +56,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> 
-                    session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
-                    logger.info("Configurando rutas permitidas");
-                    http.requestMatchers(
-                            "/auth/login", 
-                            "/auth/register", 
-                            "/auth/verify-account",
-                            "/oauth2/authorization/**",
-                            "/oauth2/login/google",
-                            "/oauth2/success",
-                            "/oauth2/error",
-                            "/login/oauth2/code/*"
-                        ).permitAll()
-                        .requestMatchers("/dashboard/**").hasRole("ADMIN")
-                        .anyRequest().authenticated();
+                    logger.info("Todas las rutas permitidas para pruebas");
+                    http.anyRequest().permitAll();
                 })
-                .oauth2Login(oauth2 -> {
-                    logger.info("Configurando OAuth2 login");
-                    oauth2
-                        .authorizationEndpoint()
-                            .baseUri("/oauth2/authorization")
-                        .and()
-                        .redirectionEndpoint()
-                            .baseUri("/login/oauth2/code/*")
-                        .and()
-                        .userInfoEndpoint()
-                            .userService(oauth2UserService())
-                        .and()
-                        .successHandler(oAuth2SuccessHandler)
-                        .failureHandler(oAuth2FailureHandler);
-                })
-                .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
     }
 

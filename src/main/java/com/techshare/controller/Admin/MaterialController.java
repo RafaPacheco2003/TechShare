@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin/material")
 public class MaterialController {
@@ -42,5 +44,11 @@ public class MaterialController {
     public ResponseEntity<?> deleteMaterial(@PathVariable Long id) {
         materialService.deleteMaterial(id);
         return new ResponseEntity<>("Material ha sido eliminado", HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<MaterialDTO>> getMaterialsByCategory(@PathVariable Long categoryId) {
+        List<MaterialDTO> materials = materialService.getMaterialsByCategory(categoryId);
+        return new ResponseEntity<>(materials, HttpStatus.OK);
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -27,10 +29,6 @@ public class SubcategoryController {
         return new ResponseEntity<>(subcategoryDTO, HttpStatus.CREATED);
     }
 
-
-
-
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getSubcategoryById(@PathVariable Long id) {
         return new ResponseEntity<>(subcategoryService.getSubcategoryById(id), HttpStatus.OK);
@@ -50,5 +48,11 @@ public class SubcategoryController {
     public ResponseEntity<?> deleteSubcategory(@PathVariable Long id) {
         subcategoryService.deleteSubcategory(id);
         return new ResponseEntity<>("Subcategoría ha sido eliminada", HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<SubcategoryDTO>> getSubcategoriesByCategoryId(@PathVariable Long categoryId) {
+        List<SubcategoryDTO> subcategories = subcategoryService.getSubcategoriesByCategory(categoryId);
+        return new ResponseEntity<>(subcategories, HttpStatus.OK);
     }
 }

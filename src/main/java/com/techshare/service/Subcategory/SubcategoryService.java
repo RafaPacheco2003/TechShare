@@ -13,6 +13,6 @@ public interface SubcategoryService {
     Optional<SubcategoryDTO> updateSubcategory(Long id, SubcategoryRequest subcategoryRequest);
     List<SubcategoryDTO> getAllSubcategories();
     void deleteSubcategory(Long id);
-
     void saveImage(SubcategoryRequest subcategoryRequest, MultipartFile imageFile);
+    List<SubcategoryDTO> getSubcategoriesByCategory(Long categoryId);
 }

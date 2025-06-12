@@ -1,5 +1,5 @@
 package com.techshare.entities;
 
 public enum MoveType {
-    IN, OUT, ADJUST
+    IN, OUT, ADJUST, SALE
 }

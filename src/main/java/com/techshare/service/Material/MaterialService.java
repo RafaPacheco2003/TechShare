@@ -14,4 +14,5 @@ public interface MaterialService {
     List<MaterialDTO> getAllMaterials();
     void deleteMaterial(Long id);
     void saveImage(MaterialRequest materialRequest, MultipartFile multipartFile);  // Método para guardar imagen
+    List<MaterialDTO> getMaterialsByCategory(Long categoryId);  // New method
 }
