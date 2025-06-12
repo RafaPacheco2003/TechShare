@@ -58,9 +58,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> 
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
-                    logger.info("Todas las rutas permitidas para pruebas");
-                    http.anyRequest().permitAll();
+                    http.requestMatchers("/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers("/api/sales/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/sales").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/sales/{id}/status").hasRole("ADMIN")
+                        .anyRequest().authenticated();
                 })
+                .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
     }
 
