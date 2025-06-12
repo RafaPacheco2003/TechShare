@@ -11,6 +11,7 @@ import com.techshare.service.Category.CategoryService;
 import com.techshare.service.ImageStorage.ImageStorage;
 import com.techshare.service.Material.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -137,5 +138,44 @@ public class MaterialServiceImpl implements MaterialService {
                     return materialDTO;
                 })
                 .collect(Collectors.toList());
+    }   @Override
+public List<MaterialDTO> getMaterialsWithFilters(Long categoryId, Long subcategoryId, String sortDirection) {
+    Sort sort = Sort.by(
+        sortDirection != null && sortDirection.equalsIgnoreCase("asc")
+            ? Sort.Direction.ASC
+            : Sort.Direction.DESC,
+        "price"
+    );
+
+    List<Material> materials;
+    // Si no hay filtros, usar findAllMaterials
+    if (categoryId == null && subcategoryId == null) {
+        materials = materialRepository.findAllMaterials(sort);
+    } else {
+        materials = materialRepository.findMaterialsWithFilters(categoryId, subcategoryId, sort);
+    }
+    
+    return materials.stream()
+            .map(material -> {
+                MaterialDTO materialDTO = convertMaterial.convertMaterialToMaterialDTO(material);
+                // Crear URL de la imagen
+                String imageUrl = "http://localhost:8080/images/" + material.getImage();
+                materialDTO.setImage(imageUrl);
+                return materialDTO;
+            })
+            .collect(Collectors.toList());
+}
+
+
+    @Override
+    public MaterialDTO getMaterialWithHighestPrice() {
+        Material material = materialRepository.findTopByOrderByPriceDesc();
+        return material != null ? convertMaterial.convertMaterialToMaterialDTO(material) : null;
+    }
+
+    @Override
+    public MaterialDTO getMaterialWithLowestPrice() {
+        Material material = materialRepository.findTopByOrderByPriceAsc();
+        return material != null ? convertMaterial.convertMaterialToMaterialDTO(material) : null;
     }
 }
