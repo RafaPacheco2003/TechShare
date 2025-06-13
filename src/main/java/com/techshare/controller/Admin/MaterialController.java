@@ -46,34 +46,7 @@ public class MaterialController {
         return new ResponseEntity<>("Material ha sido eliminado", HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<MaterialDTO>> getMaterialsByCategory(@PathVariable Long categoryId) {
-        List<MaterialDTO> materials = materialService.getMaterialsByCategory(categoryId);
-        return new ResponseEntity<>(materials, HttpStatus.OK);
-    }
 
-    @GetMapping("/filter")
-    public ResponseEntity<List<MaterialDTO>> getMaterialsWithFilters(
-            @RequestParam(required = false) Long categoryId,
-            @RequestParam(required = false) Long subcategoryId,
-            @RequestParam(required = false, defaultValue = "desc") String sortDirection) {
-        List<MaterialDTO> materials = materialService.getMaterialsWithFilters(categoryId, subcategoryId, sortDirection);
-        return new ResponseEntity<>(materials, HttpStatus.OK);
-    }
 
-    @GetMapping("/highest-price")
-    public ResponseEntity<MaterialDTO> getMaterialWithHighestPrice() {
-        MaterialDTO material = materialService.getMaterialWithHighestPrice();
-        return material != null ? 
-            new ResponseEntity<>(material, HttpStatus.OK) : 
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
 
-    @GetMapping("/lowest-price")
-    public ResponseEntity<MaterialDTO> getMaterialWithLowestPrice() {
-        MaterialDTO material = materialService.getMaterialWithLowestPrice();
-        return material != null ? 
-            new ResponseEntity<>(material, HttpStatus.OK) : 
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
 }

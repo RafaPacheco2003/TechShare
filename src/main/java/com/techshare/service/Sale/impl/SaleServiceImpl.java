@@ -46,7 +46,11 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     @Transactional
-    public SaleDTO createSale(SaleRequest saleRequest) {
+    public SaleDTO createSale(SaleRequest saleRequest, Long userId) {
+        // Get user
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
         // Verificar stock disponible
         for (SaleDetailRequest detail : saleRequest.getDetails()) {
             Material material = materialRepository.findById(detail.getMaterial_id())
@@ -60,6 +64,7 @@ public class SaleServiceImpl implements SaleService {
 
         // Crear la venta
         Sale sale = convertSale.convertSaleRequestToSale(saleRequest);
+        sale.setUser(user);
         sale.setStatus(SaleStatus.COMPLETED);
         
         // Guardar la venta primero para tener el ID
@@ -107,12 +112,10 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public List<SaleDTO> getSalesByStatus(String status) {
-        
-            SaleStatus saleStatus = SaleStatus.valueOf(status.toUpperCase());
-            return saleRepository.findByStatus(saleStatus).stream()
-                    .map(convertSale::convertSaleToSaleDTO)
-                    .collect(Collectors.toList());
-        
+        SaleStatus saleStatus = SaleStatus.valueOf(status.toUpperCase());
+        return saleRepository.findByStatus(saleStatus).stream()
+                .map(convertSale::convertSaleToSaleDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -12,9 +12,7 @@ import com.techshare.entities.enums.SaleStatus;
 import com.techshare.http.request.SaleRequest;
 import com.techshare.http.request.SaleDetailRequest;
 import com.techshare.repositories.MaterialRepository;
-import com.techshare.repositories.UserRepository;
 import com.techshare.exception.MaterialNotFoundException;
-import com.techshare.exception.UserNotFoundException;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -25,18 +23,11 @@ import java.util.stream.Collectors;
 public class ConvertSaleImpl implements ConvertSale {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private MaterialRepository materialRepository;
 
     @Override
     public Sale convertSaleRequestToSale(SaleRequest saleRequest) {
         Sale sale = new Sale();
-        
-        sale.setUser(userRepository.findById(saleRequest.getUser_id())
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + saleRequest.getUser_id())));
-        
         sale.setSaleDate(new Date());
         sale.setStatus(SaleStatus.PENDING);
         
@@ -90,4 +81,4 @@ public class ConvertSaleImpl implements ConvertSale {
         saleDTO.setSaleDetails(detailDTOs);
         return saleDTO;
     }
-} 
+}

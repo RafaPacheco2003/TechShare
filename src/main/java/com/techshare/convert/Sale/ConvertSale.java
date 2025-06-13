@@ -7,4 +7,4 @@ import com.techshare.http.request.SaleRequest;
 public interface ConvertSale {
     Sale convertSaleRequestToSale(SaleRequest saleRequest);
     SaleDTO convertSaleToSaleDTO(Sale sale);
-} 
+}

@@ -4,51 +4,68 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.techshare.DTO.SaleDTO;
 import com.techshare.http.request.SaleRequest;
 import com.techshare.service.Sale.SaleService;
+import com.techshare.repositories.UserRepository;
+import com.techshare.entities.UserEntity;
 
 import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sales")
+@RequestMapping("/api/sale")
 public class SaleController {
 
     @Autowired
     private SaleService saleService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(SaleController.class);
 
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<SaleDTO> createSale(@Valid @RequestBody SaleRequest saleRequest) {
         logger.info("Creating new sale");
-        return ResponseEntity.ok(saleService.createSale(saleRequest));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        UserEntity user = userRepository.findUserEntityByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return ResponseEntity.ok(saleService.createSale(saleRequest, user.getUser_id()));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<SaleDTO> getSaleById(@PathVariable Long id) {
         logger.info("Fetching sale with id: {}", id);
         return ResponseEntity.ok(saleService.getSaleById(id));
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<SaleDTO>> getAllSales() {
         logger.info("Fetching all sales");
         return ResponseEntity.ok(saleService.getAllSales());
     }
 
-    @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.id")
-    public ResponseEntity<List<SaleDTO>> getSalesByUser(@PathVariable Long userId) {
-        logger.info("Fetching sales for user: {}", userId);
-        return ResponseEntity.ok(saleService.getSalesByUser(userId));
+    @GetMapping("/user")
+    public ResponseEntity<List<SaleDTO>> getSalesByUser() {
+
+        logger.info("Creating new sale");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        UserEntity user = userRepository.findUserEntityByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        logger.info("Fetching sales for user: {}", user.getUser_id());
+        return ResponseEntity.ok(saleService.getSalesByUser(user.getUser_id()));
     }
 
     @GetMapping("/status/{status}")
