@@ -1,6 +1,7 @@
 package com.techshare.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,10 +13,13 @@ import java.util.List;
 
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long category_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    private Long category_id;
 
+    @Column(unique = true)
+    @NotBlank(message = "El nombre de la categoría es obligatorio")
     private String name;
+    
+    @NotBlank(message = "La imagen es obligatoria")
     private String image;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

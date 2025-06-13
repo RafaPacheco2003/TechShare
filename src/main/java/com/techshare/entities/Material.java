@@ -4,19 +4,34 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Material {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long material_id;    private String name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    private Long material_id;
+    
+    @Column(unique = true)
+    @NotBlank(message = "El nombre del material es obligatorio")
+    private String name;
+    
+    @NotBlank(message = "La descripción es obligatoria")
     private String descripcion;
+    
+    @NotNull(message = "El stock es obligatorio")
+    @Min(value = 0, message = "El stock no puede ser negativo")
     private Integer stock;
     @ManyToOne
     @JoinColumn(name = "subcategory_id")
-    private Subcategory subcategory;
+    private Subcategory subcategory;    @NotNull(message = "El precio es obligatorio")
+    @Positive(message = "El precio debe ser mayor que cero")
     private Double price;
+    
+    @NotBlank(message = "La imagen es obligatoria")
     private String image;
 
     @ManyToOne

@@ -2,6 +2,8 @@ package com.techshare.entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,11 +14,13 @@ import java.util.List;
 public class Subcategory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long subcategory_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    private Long subcategory_id;
 
+    @Column(unique = true)
+    @NotBlank(message = "El nombre de la subcategoría es obligatorio")
     private String name;
 
+    @NotBlank(message = "La imagen es obligatoria")
     private String image;
 
     @ManyToOne

@@ -60,9 +60,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
+    }    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         logger.info("Configurando filtros de seguridad");
 
@@ -77,6 +75,11 @@ public class SecurityConfig {
                             .requestMatchers("/admin/**").authenticated() // Solo protege lo que empieza con /admin/
                             .anyRequest().permitAll(); // Todo lo demás es público
                 })
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oauth2UserService()))
+                        .successHandler(oAuth2SuccessHandler)
+                        .failureHandler(oAuth2FailureHandler))
                 .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
     }
