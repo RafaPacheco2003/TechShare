@@ -1,4 +1,4 @@
-package com.techshare.services.Subcategory;
+package com.techshare.services.subcategory;
 
 import com.techshare.https.response.SubcategoryDTO;
 import com.techshare.https.request.SubcategoryRequest;

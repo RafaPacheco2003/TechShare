@@ -1,18 +1,7 @@
 package com.techshare;
 
-import com.techshare.entities.PermissionEntity;
-import com.techshare.entities.RoleEntity;
-import com.techshare.entities.RoleEnum;
-import com.techshare.entities.UserEntity;
-import com.techshare.repositories.UserRepository;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.User;
-
-import java.util.List;
-import java.util.Set;
 
 @SpringBootApplication
 public class TechshareApplication {

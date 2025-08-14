@@ -1,7 +1,7 @@
 package com.techshare.services;
 
 import com.techshare.entities.RoleEntity;
-import com.techshare.entities.RoleEnum;
+import com.techshare.entities.enums.RoleEnum;
 import com.techshare.exceptions.RoleNotFoundException;
 import com.techshare.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

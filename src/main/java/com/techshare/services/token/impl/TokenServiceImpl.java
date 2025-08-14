@@ -24,7 +24,7 @@ public class TokenServiceImpl implements TokenService {
     @Transactional
     public String generateToken(UserEntity user) {
 
-        tokenRepository.deleteByUser(user);
+        //tokenRepository.deleteByUser(user);
 
 
         VerificationToken token = new VerificationToken(user);

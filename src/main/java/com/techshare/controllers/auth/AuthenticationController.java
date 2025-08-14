@@ -1,4 +1,4 @@
-package com.techshare.controllers;
+package com.techshare.controllers.auth;
 
 
 import com.techshare.security.UserDetailServiceImpl;

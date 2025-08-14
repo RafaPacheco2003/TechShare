@@ -1,5 +1,6 @@
 package com.techshare.entities;
 
+import com.techshare.entities.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
 

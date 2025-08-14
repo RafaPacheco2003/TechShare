@@ -1,4 +1,4 @@
-package com.techshare.services.Subcategory.impl;
+package com.techshare.services.subcategory.impl;
 
 import com.techshare.https.response.SubcategoryDTO;
 import com.techshare.mappers.subcategory.ConvertSubcategory;
@@ -8,7 +8,7 @@ import com.techshare.repositories.CategoryRepository;
 import com.techshare.repositories.SubcategoryRepository;
 import com.techshare.services.category.CategoryService;
 import com.techshare.services.imageStorage.ImageStorage;
-import com.techshare.services.Subcategory.SubcategoryService;
+import com.techshare.services.subcategory.SubcategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

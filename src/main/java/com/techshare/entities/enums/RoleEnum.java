@@ -1,6 +1,5 @@
-package com.techshare.entities;
+package com.techshare.entities.enums;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 
 

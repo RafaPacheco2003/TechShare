@@ -1,4 +1,4 @@
-package com.techshare.controllers;
+package com.techshare.controllers.auth;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;

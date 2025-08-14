@@ -1,9 +1,11 @@
 package com.techshare.controllers.admin;
 
+import com.techshare.entities.enums.MoveType;
 import com.techshare.https.response.MovementDTO;
 import com.techshare.https.request.MovementRequest;
 import com.techshare.services.movement.MovementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +25,16 @@ public class MovementController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody MovementRequest movementRequest){
         return new ResponseEntity<>(movementService.createMovement(movementRequest), HttpStatus.CREATED);
-    }    @GetMapping("/all")
-    public ResponseEntity<org.springframework.data.domain.Page<MovementDTO>> findAllMovements(
-            @RequestParam(defaultValue = "0") int page) {
-        return new ResponseEntity<>(movementService.getAllMovements(page, 9), HttpStatus.OK);
+    }
+    @GetMapping("/all")
+    public ResponseEntity<Page<MovementDTO>> findAllMovements(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size,
+            @RequestParam(required = false) MoveType moveType) {
+
+        return ResponseEntity.ok(
+                movementService.getAllMovements(page, size, moveType)
+        );
     }
 
     @GetMapping("/{id}")

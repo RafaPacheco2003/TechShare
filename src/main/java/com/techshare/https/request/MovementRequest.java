@@ -1,6 +1,6 @@
 package com.techshare.https.request;
 
-import com.techshare.entities.MoveType;
+import com.techshare.entities.enums.MoveType;
 
 public class MovementRequest {
 

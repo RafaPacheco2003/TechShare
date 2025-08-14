@@ -1,5 +1,5 @@
 package com.techshare.config;
-import com.techshare.entities.MoveType;
+import com.techshare.entities.enums.MoveType;
 import com.techshare.services.MovementProcessor.AdjustMovement;
 import com.techshare.services.MovementProcessor.InMovement;
 import com.techshare.services.MovementProcessor.MovementProcessor;

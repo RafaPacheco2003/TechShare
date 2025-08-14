@@ -9,7 +9,7 @@ import com.techshare.mappers.sale.ConvertSale;
 import com.techshare.entities.Sale;
 import com.techshare.entities.Material;
 import com.techshare.entities.UserEntity;
-import com.techshare.entities.MoveType;
+import com.techshare.entities.enums.MoveType;
 import com.techshare.entities.enums.SaleStatus;
 import com.techshare.exceptions.SaleNotFoundException;
 import com.techshare.exceptions.UserNotFoundException;

@@ -1,5 +1,6 @@
 package com.techshare.entities;
 
+import com.techshare.entities.enums.MoveType;
 import jakarta.persistence.*;
 
 import java.util.Date;

@@ -1,6 +1,6 @@
 package com.techshare.https.response;
 
-import com.techshare.entities.MoveType;
+import com.techshare.entities.enums.MoveType;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
@@ -22,7 +22,8 @@ public class MovementDTO {
         @ManyToOne
         @JoinColumn(name = "usuario_id")
         private Usuario usuario;
-    */    private Long material_id;
+    */
+    private Long material_id;
     private String material_name;
 
     public Long getMovement_id() {
