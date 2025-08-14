@@ -1,19 +1,16 @@
 package com.techshare.config;
 
-import com.techshare.Security.UserDetailServiceImpl;
-import com.techshare.Security.OAuth2SuccessHandler;
-import com.techshare.Security.OAuth2FailureHandler;
+import com.techshare.security.UserDetailServiceImpl;
+import com.techshare.security.OAuth2SuccessHandler;
+import com.techshare.security.OAuth2FailureHandler;
 import com.techshare.config.filter.JwtTokenValidator;
 import com.techshare.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +27,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
