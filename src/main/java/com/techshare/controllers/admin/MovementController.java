@@ -35,6 +35,7 @@ public class MovementController {
         return ResponseEntity.ok(
                 movementService.getAllMovements(page, size, moveType)
         );
+        //s
     }
 
     @GetMapping("/{id}")
