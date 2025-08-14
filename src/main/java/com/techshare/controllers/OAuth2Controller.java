@@ -23,7 +23,7 @@ public class OAuth2Controller {
     @GetMapping("/login/google")
     public void redirectToGoogleLogin(HttpServletResponse response) throws IOException {
         logger.info("Iniciando proceso de login con Google");
-        
+        //d
         // Redirigir al endpoint de autorización de Spring Security OAuth2
         String authorizationUrl = "/oauth2/authorization/google";
         logger.info("Redirigiendo a: {}", authorizationUrl);
