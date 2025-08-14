@@ -1,10 +1,10 @@
 package com.techshare.services.category.impl;
 
-import com.techshare.dto.CategoryDTO;
+import com.techshare.https.response.CategoryDTO;
 import com.techshare.mappers.category.ConvertCategory;
 import com.techshare.entities.Category;
 import com.techshare.exceptions.CategoryNotFoundException;
-import com.techshare.http.request.CategoryRequest;
+import com.techshare.https.request.CategoryRequest;
 import com.techshare.repositories.CategoryRepository;
 import com.techshare.services.imageStorage.ImageStorage;
 import org.junit.jupiter.api.BeforeEach;

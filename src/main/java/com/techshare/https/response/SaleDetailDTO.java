@@ -1,4 +1,4 @@
-package com.techshare.dto;
+package com.techshare.https.response;
 
 public class SaleDetailDTO {
     private Long saleDetail_id;

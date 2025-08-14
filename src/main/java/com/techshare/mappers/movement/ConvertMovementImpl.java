@@ -1,9 +1,9 @@
 package com.techshare.mappers.movement;
 
-import com.techshare.dto.MovementDTO;
+import com.techshare.https.response.MovementDTO;
 import com.techshare.entities.Material;
 import com.techshare.entities.Movement;
-import com.techshare.http.request.MovementRequest;
+import com.techshare.https.request.MovementRequest;
 import com.techshare.repositories.MaterialRepository;
 
 import org.modelmapper.ModelMapper;

@@ -2,9 +2,9 @@ package com.techshare.mappers.material;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.techshare.dto.MaterialDTO;
+import com.techshare.https.response.MaterialDTO;
 import com.techshare.entities.Material;
-import com.techshare.http.request.MaterialRequest;
+import com.techshare.https.request.MaterialRequest;
 import com.techshare.repositories.UserRepository;
 import com.techshare.repositories.SubcategoryRepository;
 

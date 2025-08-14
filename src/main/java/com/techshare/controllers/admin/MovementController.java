@@ -1,7 +1,7 @@
 package com.techshare.controllers.admin;
 
-import com.techshare.dto.MovementDTO;
-import com.techshare.http.request.MovementRequest;
+import com.techshare.https.response.MovementDTO;
+import com.techshare.https.request.MovementRequest;
 import com.techshare.services.movement.MovementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

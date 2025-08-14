@@ -1,9 +1,9 @@
 package com.techshare.mappers.subcategory;
 
-import com.techshare.dto.SubcategoryDTO;
+import com.techshare.https.response.SubcategoryDTO;
 import com.techshare.entities.Category;
 import com.techshare.entities.Subcategory;
-import com.techshare.http.request.SubcategoryRequest;
+import com.techshare.https.request.SubcategoryRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

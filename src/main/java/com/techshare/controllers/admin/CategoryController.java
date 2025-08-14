@@ -1,6 +1,6 @@
 package com.techshare.controllers.admin;
 
-import com.techshare.http.request.CategoryRequest;
+import com.techshare.https.request.CategoryRequest;
 import com.techshare.services.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

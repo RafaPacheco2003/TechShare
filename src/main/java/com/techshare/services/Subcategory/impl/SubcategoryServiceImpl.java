@@ -1,9 +1,9 @@
 package com.techshare.services.Subcategory.impl;
 
-import com.techshare.dto.SubcategoryDTO;
+import com.techshare.https.response.SubcategoryDTO;
 import com.techshare.mappers.subcategory.ConvertSubcategory;
 import com.techshare.entities.Subcategory;
-import com.techshare.http.request.SubcategoryRequest;
+import com.techshare.https.request.SubcategoryRequest;
 import com.techshare.repositories.CategoryRepository;
 import com.techshare.repositories.SubcategoryRepository;
 import com.techshare.services.category.CategoryService;

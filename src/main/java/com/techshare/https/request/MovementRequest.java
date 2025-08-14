@@ -1,10 +1,6 @@
-package com.techshare.http.request;
+package com.techshare.https.request;
 
 import com.techshare.entities.MoveType;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
-import java.util.Date;
 
 public class MovementRequest {
 

@@ -1,6 +1,6 @@
 package com.techshare.controllers.user;
 
-import com.techshare.dto.MaterialDTO;
+import com.techshare.https.response.MaterialDTO;
 import com.techshare.services.category.CategoryService;
 import com.techshare.services.material.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class HomeUserControoler {
+public class HomeUserController {
 
     @Autowired
     private CategoryService categoryService;

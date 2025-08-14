@@ -2,7 +2,7 @@ package com.techshare.mappers.user;
 
 import com.techshare.entities.RoleEntity;
 import com.techshare.entities.UserEntity;
-import com.techshare.http.request.RegisterUserRequest;
+import com.techshare.https.request.RegisterUserRequest;
 import com.techshare.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

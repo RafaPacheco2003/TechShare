@@ -1,19 +1,10 @@
-package com.techshare.dto;
+package com.techshare.https.request;
 
 
-public class CategoryDTO {
-    private Long category_id;
+public class CategoryRequest {
 
     private String name;
     private String image;
-
-    public Long getCategory_id() {
-        return category_id;
-    }
-
-    public void setCategory_id(Long category_id) {
-        this.category_id = category_id;
-    }
 
     public String getName() {
         return name;

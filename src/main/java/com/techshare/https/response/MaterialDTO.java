@@ -1,4 +1,4 @@
-package com.techshare.dto;
+package com.techshare.https.response;
 
 public class MaterialDTO {    private Long material_id;    private String name;
     private String description;

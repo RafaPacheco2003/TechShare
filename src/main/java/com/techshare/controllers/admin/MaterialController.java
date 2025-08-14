@@ -1,7 +1,7 @@
 package com.techshare.controllers.admin;
 
-import com.techshare.dto.MaterialDTO;
-import com.techshare.http.request.MaterialRequest;
+import com.techshare.https.response.MaterialDTO;
+import com.techshare.https.request.MaterialRequest;
 import com.techshare.services.material.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

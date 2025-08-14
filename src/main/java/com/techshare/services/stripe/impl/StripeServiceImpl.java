@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
-import com.techshare.dto.PaymentIntentDTO;
+import com.techshare.https.response.PaymentIntentDTO;
 import com.techshare.services.stripe.StripeService;
 
 import java.util.HashMap;

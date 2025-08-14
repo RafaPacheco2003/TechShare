@@ -2,7 +2,7 @@ package com.techshare.security;
 
 import com.techshare.mappers.user.UserRequestConverter;
 import com.techshare.entities.UserEntity;
-import com.techshare.http.request.RegisterUserRequest;
+import com.techshare.https.request.RegisterUserRequest;
 import com.techshare.repositories.UserRepository;
 import com.techshare.services.accountVerification.AccountVerificationService;
 import org.springframework.beans.factory.annotation.Autowired;

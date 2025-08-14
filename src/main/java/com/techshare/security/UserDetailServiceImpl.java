@@ -2,8 +2,8 @@ package com.techshare.security;
 
 import com.techshare.security.validation.AuthenticationValidator;
 import com.techshare.entities.UserEntity;
-import com.techshare.http.request.AuthLoginRequest;
-import com.techshare.http.response.AuthResponse;
+import com.techshare.https.request.AuthLoginRequest;
+import com.techshare.https.response.AuthResponse;
 import com.techshare.repositories.UserRepository;
 import com.techshare.services.email.EmailService;
 import com.techshare.util.JwtUtils;

@@ -1,4 +1,4 @@
-package com.techshare.dto;
+package com.techshare.https.response;
 
 public class PaymentIntentDTO {
     private String clientSecret;

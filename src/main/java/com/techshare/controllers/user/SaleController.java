@@ -1,4 +1,4 @@
-package com.techshare.controllers;
+package com.techshare.controllers.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.techshare.dto.SaleDTO;
-import com.techshare.http.request.SaleRequest;
+import com.techshare.https.response.SaleDTO;
+import com.techshare.https.request.SaleRequest;
 import com.techshare.services.sale.SaleService;
 import com.techshare.repositories.UserRepository;
 import com.techshare.entities.UserEntity;

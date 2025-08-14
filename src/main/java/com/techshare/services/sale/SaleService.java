@@ -1,7 +1,7 @@
 package com.techshare.services.sale;
 
-import com.techshare.dto.SaleDTO;
-import com.techshare.http.request.SaleRequest;
+import com.techshare.https.response.SaleDTO;
+import com.techshare.https.request.SaleRequest;
 import java.util.List;
 
 public interface SaleService {

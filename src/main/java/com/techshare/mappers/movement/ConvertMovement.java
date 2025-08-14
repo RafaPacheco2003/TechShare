@@ -1,8 +1,8 @@
 package com.techshare.mappers.movement;
 
-import com.techshare.dto.MovementDTO;
+import com.techshare.https.response.MovementDTO;
 import com.techshare.entities.Movement;
-import com.techshare.http.request.MovementRequest;
+import com.techshare.https.request.MovementRequest;
 
 public interface ConvertMovement {
     Movement convertMovementRequestToMovementEntity(MovementRequest movementRequest);

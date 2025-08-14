@@ -1,8 +1,8 @@
 package com.techshare.mappers.subcategory;
 
-import com.techshare.dto.SubcategoryDTO;
+import com.techshare.https.response.SubcategoryDTO;
 import com.techshare.entities.Subcategory;
-import com.techshare.http.request.SubcategoryRequest;
+import com.techshare.https.request.SubcategoryRequest;
 
 public interface ConvertSubcategory {
     Subcategory convertSubcategoryRequestToSubcategoryEntity(SubcategoryRequest subcategoryRequest);

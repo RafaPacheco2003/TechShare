@@ -1,8 +1,8 @@
 package com.techshare.mappers.sale;
 
-import com.techshare.dto.SaleDTO;
+import com.techshare.https.response.SaleDTO;
 import com.techshare.entities.Sale;
-import com.techshare.http.request.SaleRequest;
+import com.techshare.https.request.SaleRequest;
  
 public interface ConvertSale {
     Sale convertSaleRequestToSale(SaleRequest saleRequest);

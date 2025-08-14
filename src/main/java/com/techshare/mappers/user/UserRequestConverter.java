@@ -1,7 +1,7 @@
 package com.techshare.mappers.user;
 
 import com.techshare.entities.UserEntity;
-import com.techshare.http.request.RegisterUserRequest;
+import com.techshare.https.request.RegisterUserRequest;
 
 /**
  * Interfaz para convertir RegisterUserRequest a UserEntity

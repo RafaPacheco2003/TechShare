@@ -1,8 +1,8 @@
 package com.techshare.mappers.material;
 
-import com.techshare.dto.MaterialDTO;
+import com.techshare.https.response.MaterialDTO;
 import com.techshare.entities.Material;
-import com.techshare.http.request.MaterialRequest;
+import com.techshare.https.request.MaterialRequest;
 
 public interface ConvertMaterial {
     Material convertMaterialRequestToMaterial(MaterialRequest materialRequest);

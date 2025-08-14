@@ -1,7 +1,7 @@
 package com.techshare.services.category;
 
-import com.techshare.dto.CategoryDTO;
-import com.techshare.http.request.CategoryRequest;
+import com.techshare.https.response.CategoryDTO;
+import com.techshare.https.request.CategoryRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

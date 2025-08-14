@@ -1,4 +1,4 @@
-package com.techshare.dto;
+package com.techshare.https.response;
 
 import com.techshare.entities.MoveType;
 import jakarta.persistence.Temporal;

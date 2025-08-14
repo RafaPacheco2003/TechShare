@@ -3,14 +3,14 @@ package com.techshare.mappers.sale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.techshare.dto.SaleDTO;
-import com.techshare.dto.SaleDetailDTO;
+import com.techshare.https.response.SaleDTO;
+import com.techshare.https.response.SaleDetailDTO;
 import com.techshare.entities.Sale;
 import com.techshare.entities.SaleDetail;
 import com.techshare.entities.Material;
 import com.techshare.entities.enums.SaleStatus;
-import com.techshare.http.request.SaleRequest;
-import com.techshare.http.request.SaleDetailRequest;
+import com.techshare.https.request.SaleRequest;
+import com.techshare.https.request.SaleDetailRequest;
 import com.techshare.repositories.MaterialRepository;
 import com.techshare.exceptions.MaterialNotFoundException;
 

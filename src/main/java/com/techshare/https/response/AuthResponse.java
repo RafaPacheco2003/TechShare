@@ -1,4 +1,4 @@
-package com.techshare.http.response;
+package com.techshare.https.response;
 
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

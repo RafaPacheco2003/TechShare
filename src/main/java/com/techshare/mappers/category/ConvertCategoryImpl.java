@@ -1,8 +1,8 @@
 package com.techshare.mappers.category;
 
-import com.techshare.dto.CategoryDTO;
+import com.techshare.https.response.CategoryDTO;
 import com.techshare.entities.Category;
-import com.techshare.http.request.CategoryRequest;
+import com.techshare.https.request.CategoryRequest;
 import org.springframework.stereotype.Service;
 
 @Service

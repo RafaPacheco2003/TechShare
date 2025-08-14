@@ -1,4 +1,4 @@
-package com.techshare.dto;
+package com.techshare.https.response;
 
 import java.util.Date;
 import java.util.Set;

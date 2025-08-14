@@ -1,7 +1,7 @@
 package com.techshare.services.movement;
 
-import com.techshare.dto.MovementDTO;
-import com.techshare.http.request.MovementRequest;
+import com.techshare.https.response.MovementDTO;
+import com.techshare.https.request.MovementRequest;
 
 import java.util.Optional;
 

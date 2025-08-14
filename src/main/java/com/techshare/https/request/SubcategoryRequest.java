@@ -1,8 +1,4 @@
-package com.techshare.http.request;
-
-import com.techshare.entities.Category;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+package com.techshare.https.request;
 
 public class SubcategoryRequest {
 

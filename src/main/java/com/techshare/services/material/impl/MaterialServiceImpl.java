@@ -1,10 +1,10 @@
 package com.techshare.services.material.impl;
 
-import com.techshare.dto.MaterialDTO;
+import com.techshare.https.response.MaterialDTO;
 import com.techshare.mappers.material.ConvertMaterial;
 import com.techshare.entities.Material;
 import com.techshare.entities.Subcategory;
-import com.techshare.http.request.MaterialRequest;
+import com.techshare.https.request.MaterialRequest;
 import com.techshare.repositories.MaterialRepository;
 import com.techshare.repositories.SubcategoryRepository;
 import com.techshare.services.category.CategoryService;

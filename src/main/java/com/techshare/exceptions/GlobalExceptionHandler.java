@@ -1,6 +1,6 @@
 package com.techshare.exceptions;
 
-import com.techshare.http.response.ErrorResponse;
+import com.techshare.https.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

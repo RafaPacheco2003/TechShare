@@ -1,10 +1,10 @@
 package com.techshare.services.movement.impl;
-import com.techshare.dto.MovementDTO;
+import com.techshare.https.response.MovementDTO;
 import com.techshare.mappers.movement.ConvertMovement;
 import com.techshare.entities.Material;
 import com.techshare.entities.MoveType;
 import com.techshare.entities.Movement;
-import com.techshare.http.request.MovementRequest;
+import com.techshare.https.request.MovementRequest;
 import com.techshare.repositories.MaterialRepository;
 import com.techshare.repositories.MovementRepository;
 import com.techshare.services.movement.MovementService;

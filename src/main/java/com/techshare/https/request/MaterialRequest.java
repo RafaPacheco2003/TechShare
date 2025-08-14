@@ -1,7 +1,4 @@
-package com.techshare.http.request;
-
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+package com.techshare.https.request;
 
 public class MaterialRequest {    private String name;
     private String description;

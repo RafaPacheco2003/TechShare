@@ -1,7 +1,7 @@
 package com.techshare.controllers.admin;
 
-import com.techshare.dto.SubcategoryDTO;
-import com.techshare.http.request.SubcategoryRequest;
+import com.techshare.https.response.SubcategoryDTO;
+import com.techshare.https.request.SubcategoryRequest;
 import com.techshare.services.Subcategory.SubcategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

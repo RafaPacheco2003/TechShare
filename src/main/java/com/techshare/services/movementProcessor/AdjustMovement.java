@@ -1,7 +1,7 @@
 package com.techshare.services.MovementProcessor;
 
 import com.techshare.entities.Material;
-import com.techshare.http.request.MovementRequest;
+import com.techshare.https.request.MovementRequest;
 import org.springframework.stereotype.Component;
 
 @Component("adjustMovementProcessor")

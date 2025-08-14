@@ -1,7 +1,7 @@
 package com.techshare.services.material;
 
-import com.techshare.dto.MaterialDTO;
-import com.techshare.http.request.MaterialRequest;
+import com.techshare.https.response.MaterialDTO;
+import com.techshare.https.request.MaterialRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

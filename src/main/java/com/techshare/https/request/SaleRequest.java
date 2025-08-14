@@ -1,4 +1,4 @@
-package com.techshare.http.request;
+package com.techshare.https.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
