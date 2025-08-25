@@ -18,11 +18,6 @@ public class MovementDTO {
 
     @Temporal(TemporalType.DATE)
     private Date date;
-    /*
-        @ManyToOne
-        @JoinColumn(name = "usuario_id")
-        private Usuario usuario;
-    */
     private Long material_id;
     private String material_name;
 

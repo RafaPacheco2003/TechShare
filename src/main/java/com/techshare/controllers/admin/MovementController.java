@@ -1,6 +1,7 @@
 package com.techshare.controllers.admin;
 
 import com.techshare.entities.enums.MoveType;
+import com.techshare.https.response.CustomPageResponse;
 import com.techshare.https.response.MovementDTO;
 import com.techshare.https.request.MovementRequest;
 import com.techshare.services.movement.MovementService;
@@ -27,15 +28,22 @@ public class MovementController {
         return new ResponseEntity<>(movementService.createMovement(movementRequest), HttpStatus.CREATED);
     }
     @GetMapping("/all")
-    public ResponseEntity<Page<MovementDTO>> findAllMovements(
+    public ResponseEntity<CustomPageResponse<MovementDTO>> findAllMovements(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size,
             @RequestParam(required = false) MoveType moveType) {
 
-        return ResponseEntity.ok(
-                movementService.getAllMovements(page, size, moveType)
+        Page<MovementDTO> pageResult = movementService.getAllMovements(page, size, moveType);
+
+        CustomPageResponse<MovementDTO> response = new CustomPageResponse<>(
+                pageResult.getContent(),
+                pageResult.getNumber(),
+                pageResult.getSize(),
+                pageResult.getTotalElements(),
+                pageResult.getTotalPages()
         );
-        //s
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

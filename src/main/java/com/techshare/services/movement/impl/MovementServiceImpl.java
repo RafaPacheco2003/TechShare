@@ -77,12 +77,26 @@ public class MovementServiceImpl implements MovementService {
     }
     @Override
     public Page<MovementDTO> getAllMovements(int page, int size, MoveType moveType) {
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("movement_id").descending());
 
-        return movementRepository.findAllMovements(
-                moveType, // Puede ser null
-                pageRequest
-        ).map(convertMovement::convertMovementEntityToMovementDTO);
+        return movementRepository.findAllMovements(moveType, pageRequest)
+                .map(this::convertToSimplifiedDTO);
+    }
+
+    private MovementDTO convertToSimplifiedDTO(Movement movement) {
+        MovementDTO dto = new MovementDTO();
+        dto.setMovement_id(movement.getMovement_id());
+        dto.setMoveType(movement.getMoveType());
+        dto.setQuantity(movement.getQuantity());
+        dto.setComment(movement.getComment());
+        dto.setDate(movement.getDate());
+
+        if (movement.getMaterial() != null) {
+            dto.setMaterial_id(movement.getMaterial().getMaterial_id());
+            dto.setMaterial_name(movement.getMaterial().getName());
+        }
+
+        return dto;
     }
     @Override
     @Transactional
