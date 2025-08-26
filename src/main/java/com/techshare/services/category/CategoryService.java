@@ -14,6 +14,11 @@ public interface CategoryService {
     List<CategoryDTO> getAllCategories();
     void deleteCategory(Long id);
 
+
+
+
+    List<CategoryDTO> getTop7Categories();
+
     void verifyCategoryExists(Long category_id);
 
     void saveImage(CategoryRequest categoryRequest, MultipartFile multipartFile);

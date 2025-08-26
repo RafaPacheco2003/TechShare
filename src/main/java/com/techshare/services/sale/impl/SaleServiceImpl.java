@@ -19,7 +19,7 @@ import com.techshare.https.request.SaleDetailRequest;
 import com.techshare.https.request.MovementRequest;
 import com.techshare.repositories.SaleRepository;
 import com.techshare.repositories.UserRepository;
-import com.techshare.repositories.MaterialRepository;
+import com.techshare.repositories.ProductRepository;
 import com.techshare.services.sale.SaleService;
 import com.techshare.services.movement.MovementService;
 
@@ -36,7 +36,7 @@ public class SaleServiceImpl implements SaleService {
     private UserRepository userRepository;
 
     @Autowired
-    private MaterialRepository materialRepository;
+    private ProductRepository productRepository;
 
     @Autowired
     private ConvertSale convertSale;
@@ -53,7 +53,7 @@ public class SaleServiceImpl implements SaleService {
 
         // Verificar stock disponible
         for (SaleDetailRequest detail : saleRequest.getDetails()) {
-            Material material = materialRepository.findById(detail.getMaterial_id())
+            Material material = productRepository.findById(detail.getMaterial_id())
                     .orElseThrow(() -> new RuntimeException("Material not found with id: " + detail.getMaterial_id()));
             
             if (material.getStock() < detail.getQuantity()) {
@@ -72,12 +72,12 @@ public class SaleServiceImpl implements SaleService {
 
         // Actualizar stock de materiales y crear registros de movimientos
         for (SaleDetailRequest detail : saleRequest.getDetails()) {
-            Material material = materialRepository.findById(detail.getMaterial_id())
+            Material material = productRepository.findById(detail.getMaterial_id())
                     .orElseThrow(() -> new RuntimeException("Material not found with id: " + detail.getMaterial_id()));
             
             // Crear movimiento de tipo SALE
             MovementRequest movementRequest = new MovementRequest();
-            movementRequest.setMaterial_id(material.getMaterial_id());
+            movementRequest.setMaterial_id(material.getProduct_id());
             movementRequest.setQuantity(detail.getQuantity());
             movementRequest.setMoveType(MoveType.SALE);
             movementRequest.setComment("Sale movement for sale ID: " + sale.getSale_id());

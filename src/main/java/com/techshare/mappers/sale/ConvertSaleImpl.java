@@ -11,8 +11,8 @@ import com.techshare.entities.Material;
 import com.techshare.entities.enums.SaleStatus;
 import com.techshare.https.request.SaleRequest;
 import com.techshare.https.request.SaleDetailRequest;
-import com.techshare.repositories.MaterialRepository;
-import com.techshare.exceptions.MaterialNotFoundException;
+import com.techshare.repositories.ProductRepository;
+import com.techshare.exceptions.ProductNotFoundException;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class ConvertSaleImpl implements ConvertSale {
 
     @Autowired
-    private MaterialRepository materialRepository;
+    private ProductRepository productRepository;
 
     @Override
     public Sale convertSaleRequestToSale(SaleRequest saleRequest) {
@@ -35,8 +35,8 @@ public class ConvertSaleImpl implements ConvertSale {
         Double totalAmount = 0.0;
 
         for (SaleDetailRequest detailRequest : saleRequest.getDetails()) {
-            Material material = materialRepository.findById(detailRequest.getMaterial_id())
-                    .orElseThrow(() -> new MaterialNotFoundException("Material not found with id: " + detailRequest.getMaterial_id()));
+            Material material = productRepository.findById(detailRequest.getMaterial_id())
+                    .orElseThrow(() -> new ProductNotFoundException("Material not found with id: " + detailRequest.getMaterial_id()));
 
             SaleDetail detail = new SaleDetail();
             detail.setSale(sale);
@@ -69,7 +69,7 @@ public class ConvertSaleImpl implements ConvertSale {
                 .map(detail -> {
                     SaleDetailDTO detailDTO = new SaleDetailDTO();
                     detailDTO.setSaleDetail_id(detail.getSaleDetail_id());
-                    detailDTO.setMaterial_id(detail.getMaterial().getMaterial_id());
+                    detailDTO.setMaterial_id(detail.getMaterial().getProduct_id());
                     detailDTO.setMaterialName(detail.getMaterial().getName());
                     detailDTO.setQuantity(detail.getQuantity());
                     detailDTO.setUnitPrice(detail.getUnitPrice());

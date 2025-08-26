@@ -1,6 +1,6 @@
 package com.techshare.https.response;
 
-public class MaterialDTO {    private Long material_id;    private String name;
+public class ProductDTO {    private Long product_id;    private String name;
     private String description;
     private Integer stock;
     private Long subcategory_id;
@@ -10,12 +10,12 @@ public class MaterialDTO {    private Long material_id;    private String name;
     private String url;
     private Long user_id;
 
-    public Long getMaterial_id() {
-        return material_id;
+    public Long getProduct_id() {
+        return product_id;
     }
 
-    public void setMaterial_id(Long material_id) {
-        this.material_id = material_id;
+    public void setProduct_id(Long product_id) {
+        this.product_id = product_id;
     }
 
     public String getName() {

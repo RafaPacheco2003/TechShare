@@ -1,10 +1,10 @@
 package com.techshare.config;
 import com.techshare.entities.enums.MoveType;
-import com.techshare.services.MovementProcessor.AdjustMovement;
-import com.techshare.services.MovementProcessor.InMovement;
-import com.techshare.services.MovementProcessor.MovementProcessor;
-import com.techshare.services.MovementProcessor.OutMovement;
-import com.techshare.services.MovementProcessor.SaleMovement;
+import com.techshare.services.movementProcessor.AdjustMovement;
+import com.techshare.services.movementProcessor.InMovement;
+import com.techshare.services.movementProcessor.MovementProcessor;
+import com.techshare.services.movementProcessor.OutMovement;
+import com.techshare.services.movementProcessor.SaleMovement;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

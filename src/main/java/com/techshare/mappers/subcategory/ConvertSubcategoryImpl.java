@@ -4,6 +4,7 @@ import com.techshare.https.response.SubcategoryDTO;
 import com.techshare.entities.Category;
 import com.techshare.entities.Subcategory;
 import com.techshare.https.request.SubcategoryRequest;
+import com.techshare.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ public class ConvertSubcategoryImpl implements ConvertSubcategory{
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public Subcategory convertSubcategoryRequestToSubcategoryEntity(SubcategoryRequest subcategoryRequest) {
@@ -50,6 +53,8 @@ public class ConvertSubcategoryImpl implements ConvertSubcategory{
 
         if (subcategory.getCategory() != null) {
             subcategoryDTO.setCategory_id(subcategory.getCategory().getCategory_id());
+
+            subcategoryDTO.setCategory_name(subcategory.getCategory().getName());
         }
 
         return subcategoryDTO;

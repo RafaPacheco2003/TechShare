@@ -1,8 +1,5 @@
 package com.techshare.entities;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +10,7 @@ import jakarta.validation.constraints.Positive;
 public class Material {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)    private Long material_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    private Long product_id;
     
     @Column(unique = true)
     @NotBlank(message = "El nombre del material es obligatorio")
@@ -41,12 +38,12 @@ public class Material {
     @Column(name = "title")
     private String title;
 
-    public Long getMaterial_id() {
-        return material_id;
+    public Long getProduct_id() {
+        return product_id;
     }
 
-    public void setMaterial_id(Long material_id) {
-        this.material_id = material_id;
+    public void setProduct_id(Long material_id) {
+        this.product_id = material_id;
     }
 
     public String getName() {

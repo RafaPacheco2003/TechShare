@@ -1,15 +1,15 @@
-package com.techshare.services.material.impl;
+package com.techshare.services.product.impl;
 
-import com.techshare.https.response.MaterialDTO;
-import com.techshare.mappers.material.ConvertMaterial;
+import com.techshare.https.response.ProductDTO;
+import com.techshare.mappers.product.ConvertProduct;
 import com.techshare.entities.Material;
 import com.techshare.entities.Subcategory;
-import com.techshare.https.request.MaterialRequest;
-import com.techshare.repositories.MaterialRepository;
+import com.techshare.https.request.ProductRequest;
+import com.techshare.repositories.ProductRepository;
 import com.techshare.repositories.SubcategoryRepository;
 import com.techshare.services.category.CategoryService;
 import com.techshare.services.imageStorage.ImageStorage;
-import com.techshare.services.material.MaterialService;
+import com.techshare.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -21,10 +21,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class MaterialServiceImpl implements MaterialService {
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    private MaterialRepository materialRepository;
+    private ProductRepository productRepository;
 
     @Autowired
     private SubcategoryRepository subcategoryRepository;
@@ -36,70 +36,70 @@ public class MaterialServiceImpl implements MaterialService {
     private ImageStorage imageStorage;  // Autowired del servicio de imágenes
 
     @Autowired
-    private ConvertMaterial convertMaterial;
+    private ConvertProduct convertMaterial;
 
     @Override
-    public MaterialDTO createMaterial(MaterialRequest materialRequest, MultipartFile multipartFile) {
+    public ProductDTO createMaterial(ProductRequest productRequest, MultipartFile multipartFile) {
         // Guardar la imagen y obtener el nombre
-        saveImage(materialRequest, multipartFile);
+        saveImage(productRequest, multipartFile);
 
         // Convertir la solicitud en entidad
-        Material materialEntity = convertMaterial.convertMaterialRequestToMaterial(materialRequest);
+        Material materialEntity = convertMaterial.convertMaterialRequestToMaterial(productRequest);
 
         // Guardar el material en la base de datos
-        Material savedMaterial = materialRepository.save(materialEntity);
+        Material savedMaterial = productRepository.save(materialEntity);
 
         // Convertir la entidad guardada en DTO y devolverla
         return convertMaterial.convertMaterialToMaterialDTO(savedMaterial);
     }
 
     @Override
-    public Optional<MaterialDTO> getMaterialById(Long id) {
-        return materialRepository.findById(id)
+    public Optional<ProductDTO> getMaterialById(Long id) {
+        return productRepository.findById(id)
                 .map(material -> {
-                    MaterialDTO materialDTO = convertMaterial.convertMaterialToMaterialDTO(material);
+                    ProductDTO productDTO = convertMaterial.convertMaterialToMaterialDTO(material);
                     // Crear URL de imagen y establecerla en el DTO
                     String imageUrl = "http://localhost:8080/images/" + material.getImage();
-                    materialDTO.setImage(imageUrl);
-                    return Optional.of(materialDTO);
+                    productDTO.setImage(imageUrl);
+                    return Optional.of(productDTO);
                 })
                 .orElseThrow(() -> new RuntimeException("Material not found with ID: " + id));  // Excepción personalizada
     }
 
     @Override
-    public Optional<MaterialDTO> updateMaterial(Long id, MaterialRequest materialRequest) {
-        return materialRepository.findById(id)
+    public Optional<ProductDTO> updateMaterial(Long id, ProductRequest productRequest) {
+        return productRepository.findById(id)
                 .map(existingMaterial -> {
-                    convertMaterial.convertUpdateMaterialRequestToMaterial(materialRequest, existingMaterial);
-                    Material updatedMaterial = materialRepository.save(existingMaterial);  // Guardar el material actualizado
+                    convertMaterial.convertUpdateMaterialRequestToMaterial(productRequest, existingMaterial);
+                    Material updatedMaterial = productRepository.save(existingMaterial);  // Guardar el material actualizado
                     return Optional.of(convertMaterial.convertMaterialToMaterialDTO(updatedMaterial));  // Devolver el DTO actualizado
                 })
                 .orElseThrow(() -> new RuntimeException("Material not found with ID: " + id));
     }
 
     @Override
-    public List<MaterialDTO> getAllMaterials() {
-        return materialRepository.findAll().stream()
+    public List<ProductDTO> getAllMaterials() {
+        return productRepository.findAll().stream()
                 .map(material -> {
-                    MaterialDTO materialDTO = convertMaterial.convertMaterialToMaterialDTO(material);
+                    ProductDTO productDTO = convertMaterial.convertMaterialToMaterialDTO(material);
                     // Crear URL de la imagen
                     String imageUrl = "http://localhost:8080/images/" + material.getImage();
-                    materialDTO.setImage(imageUrl);
-                    return materialDTO;
+                    productDTO.setImage(imageUrl);
+                    return productDTO;
                 })
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deleteMaterial(Long id) {
-        if (!materialRepository.existsById(id)) {
+        if (!productRepository.existsById(id)) {
             throw new RuntimeException("Material not found with ID: " + id);
         }
-        materialRepository.deleteById(id);
+        productRepository.deleteById(id);
     }
 
     @Override
-    public void saveImage(MaterialRequest materialRequest, MultipartFile multipartFile) {
+    public void saveImage(ProductRequest productRequest, MultipartFile multipartFile) {
         // Guardar la imagen usando el servicio de almacenamiento y obtener la ruta
         String imagePath = imageStorage.saveImage(multipartFile);
 
@@ -107,11 +107,11 @@ public class MaterialServiceImpl implements MaterialService {
         String imageName = Paths.get(imagePath).getFileName().toString();
 
         // Asignar el nombre de la imagen al materialRequest
-        materialRequest.setImage(imageName);
+        productRequest.setImage(imageName);
     }
 
     @Override
-    public List<MaterialDTO> getMaterialsByCategory(Long categoryId) {
+    public List<ProductDTO> getMaterialsByCategory(Long categoryId) {
         // Verify if category exists, this will throw CategoryNotFoundException if not found
         categoryService.verifyCategoryExists(categoryId);
         
@@ -129,17 +129,17 @@ public class MaterialServiceImpl implements MaterialService {
         }
         
         // Get all materials for these subcategories
-        return materialRepository.findBySubcategoryIds(subcategoryIds).stream()
+        return productRepository.findBySubcategoryIds(subcategoryIds).stream()
                 .map(material -> {
-                    MaterialDTO materialDTO = convertMaterial.convertMaterialToMaterialDTO(material);
+                    ProductDTO productDTO = convertMaterial.convertMaterialToMaterialDTO(material);
                     // Crear URL de la imagen
                     String imageUrl = "http://localhost:8080/images/" + material.getImage();
-                    materialDTO.setImage(imageUrl);
-                    return materialDTO;
+                    productDTO.setImage(imageUrl);
+                    return productDTO;
                 })
                 .collect(Collectors.toList());
     }   @Override
-public List<MaterialDTO> getMaterialsWithFilters(Long categoryId, Long subcategoryId, String sortDirection) {
+public List<ProductDTO> getMaterialsWithFilters(Long categoryId, Long subcategoryId, String sortDirection) {
     Sort sort = Sort.by(
         sortDirection != null && sortDirection.equalsIgnoreCase("asc")
             ? Sort.Direction.ASC
@@ -150,32 +150,32 @@ public List<MaterialDTO> getMaterialsWithFilters(Long categoryId, Long subcatego
     List<Material> materials;
     // Si no hay filtros, usar findAllMaterials
     if (categoryId == null && subcategoryId == null) {
-        materials = materialRepository.findAllMaterials(sort);
+        materials = productRepository.findAllMaterials(sort);
     } else {
-        materials = materialRepository.findMaterialsWithFilters(categoryId, subcategoryId, sort);
+        materials = productRepository.findMaterialsWithFilters(categoryId, subcategoryId, sort);
     }
     
     return materials.stream()
             .map(material -> {
-                MaterialDTO materialDTO = convertMaterial.convertMaterialToMaterialDTO(material);
+                ProductDTO productDTO = convertMaterial.convertMaterialToMaterialDTO(material);
                 // Crear URL de la imagen
                 String imageUrl = "http://localhost:8080/images/" + material.getImage();
-                materialDTO.setImage(imageUrl);
-                return materialDTO;
+                productDTO.setImage(imageUrl);
+                return productDTO;
             })
             .collect(Collectors.toList());
 }
 
 
     @Override
-    public MaterialDTO getMaterialWithHighestPrice() {
-        Material material = materialRepository.findTopByOrderByPriceDesc();
+    public ProductDTO getMaterialWithHighestPrice() {
+        Material material = productRepository.findTopByOrderByPriceDesc();
         return material != null ? convertMaterial.convertMaterialToMaterialDTO(material) : null;
     }
 
     @Override
-    public MaterialDTO getMaterialWithLowestPrice() {
-        Material material = materialRepository.findTopByOrderByPriceAsc();
+    public ProductDTO getMaterialWithLowestPrice() {
+        Material material = productRepository.findTopByOrderByPriceAsc();
         return material != null ? convertMaterial.convertMaterialToMaterialDTO(material) : null;
     }
 }

@@ -4,7 +4,7 @@ import com.techshare.https.response.MovementDTO;
 import com.techshare.entities.Material;
 import com.techshare.entities.Movement;
 import com.techshare.https.request.MovementRequest;
-import com.techshare.repositories.MaterialRepository;
+import com.techshare.repositories.ProductRepository;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class ConvertMovementImpl implements ConvertMovement {
     private ModelMapper modelMapper;
 
     @Autowired
-    private MaterialRepository materialRepository;
+    private ProductRepository productRepository;
 
     @Override
     public Movement convertMovementRequestToMovementEntity(MovementRequest movementRequest) {
@@ -27,7 +27,7 @@ public class ConvertMovementImpl implements ConvertMovement {
         movement.setComment(movementRequest.getComment());
 
         // Obtener el material completo de la base de datos
-        Material material = materialRepository.findById(movementRequest.getMaterial_id())
+        Material material = productRepository.findById(movementRequest.getMaterial_id())
                 .orElseThrow(() -> new RuntimeException("Material no encontrado con ID: " + movementRequest.getMaterial_id()));
         movement.setMaterial(material);
 
@@ -40,7 +40,7 @@ public class ConvertMovementImpl implements ConvertMovement {
 
         // Si es necesario actualizar el material
         if (movementRequest.getMaterial_id() != null) {
-            Material material = materialRepository.findById(movementRequest.getMaterial_id())
+            Material material = productRepository.findById(movementRequest.getMaterial_id())
                     .orElseThrow(() -> new RuntimeException("Material no encontrado con ID: " + movementRequest.getMaterial_id()));
             existingMovement.setMaterial(material);
         }
@@ -54,7 +54,7 @@ public class ConvertMovementImpl implements ConvertMovement {
         movementDTO.setQuantity(movement.getQuantity());
         movementDTO.setComment(movement.getComment());
         movementDTO.setDate(movement.getDate());        if (movement.getMaterial() != null) {
-            movementDTO.setMaterial_id(movement.getMaterial().getMaterial_id());
+            movementDTO.setMaterial_id(movement.getMaterial().getProduct_id());
             movementDTO.setMaterial_name(movement.getMaterial().getName());
         }
 

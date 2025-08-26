@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-public interface MaterialRepository extends JpaRepository<Material, Long> {
+public interface ProductRepository extends JpaRepository<Material, Long> {
     @Query("SELECT m FROM Material m WHERE m.subcategory.subcategory_id IN :subcategoryIds")
     List<Material> findBySubcategoryIds(@Param("subcategoryIds") List<Long> subcategoryIds);    @Query("SELECT m FROM Material m WHERE " +
            "(:categoryId IS NULL OR m.subcategory.category.category_id = :categoryId) AND " +

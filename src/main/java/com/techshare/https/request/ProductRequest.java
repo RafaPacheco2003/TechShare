@@ -1,6 +1,6 @@
 package com.techshare.https.request;
 
-public class MaterialRequest {    private String name;
+public class ProductRequest {    private String name;
     private String description;
     private Integer stock;
     private Long subcategory_id;

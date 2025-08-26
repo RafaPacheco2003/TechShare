@@ -5,10 +5,10 @@ import com.techshare.entities.Material;
 import com.techshare.entities.enums.MoveType;
 import com.techshare.entities.Movement;
 import com.techshare.https.request.MovementRequest;
-import com.techshare.repositories.MaterialRepository;
+import com.techshare.repositories.ProductRepository;
 import com.techshare.repositories.MovementRepository;
 import com.techshare.services.movement.MovementService;
-import com.techshare.services.MovementProcessor.MovementProcessor;
+import com.techshare.services.movementProcessor.MovementProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,25 +19,24 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @Service
 public class MovementServiceImpl implements MovementService {
 
     private final MovementRepository movementRepository;
-    private final MaterialRepository materialRepository;
+    private final ProductRepository productRepository;
     private final ConvertMovement convertMovement;
     private final Map<MoveType, MovementProcessor> movementProcessorMap;
 
     @Autowired
     public MovementServiceImpl(
             MovementRepository movementRepository,
-            MaterialRepository materialRepository,
+            ProductRepository productRepository,
             ConvertMovement convertMovement,
             Map<MoveType, MovementProcessor> movementProcessorMap) {
         this.movementRepository = movementRepository;
-        this.materialRepository = materialRepository;
+        this.productRepository = productRepository;
         this.convertMovement = convertMovement;
         this.movementProcessorMap = movementProcessorMap;
     }
@@ -92,7 +91,7 @@ public class MovementServiceImpl implements MovementService {
         dto.setDate(movement.getDate());
 
         if (movement.getMaterial() != null) {
-            dto.setMaterial_id(movement.getMaterial().getMaterial_id());
+            dto.setMaterial_id(movement.getMaterial().getProduct_id());
             dto.setMaterial_name(movement.getMaterial().getName());
         }
 
@@ -118,7 +117,7 @@ public class MovementServiceImpl implements MovementService {
         processor.applyMovement(material, request);
     }
     private Material findMaterialById(Long materialId) {
-        return materialRepository.findById(materialId)
+        return productRepository.findById(materialId)
                 .orElseThrow(() -> new RuntimeException("Material con ID " + materialId + " no encontrado"));
     }
 
@@ -130,14 +129,14 @@ public class MovementServiceImpl implements MovementService {
 
 
     private Movement saveMovementAndMaterial(Movement movement, Material material) {
-        materialRepository.save(material);
+        productRepository.save(material);
         return movementRepository.save(movement);
     }
 
     private void validateMaterialChange(Movement existingMovement, Long newMaterialId) {
         if (newMaterialId != null &&
                 (existingMovement.getMaterial() == null ||
-                        !existingMovement.getMaterial().getMaterial_id().equals(newMaterialId))) {
+                        !existingMovement.getMaterial().getProduct_id().equals(newMaterialId))) {
             findMaterialById(newMaterialId);
         }
     }

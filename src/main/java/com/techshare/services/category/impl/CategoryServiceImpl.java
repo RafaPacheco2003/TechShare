@@ -88,6 +88,21 @@ public List<CategoryDTO> getAllCategories() {
         categoryRepository.deleteById(id);
     }
 
+
+    public List<CategoryDTO> getTop7Categories() {
+        return categoryRepository.findTop7Categories().stream()
+                .map(category -> {
+                    CategoryDTO categoryDTO = convertCategory.convertCategoryToCategoryDTO(category);
+                    String imageUrl = "http://localhost:8080/images/" + category.getImage();
+                    categoryDTO.setImage(imageUrl);
+                    return categoryDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
+
     @Override
     public void verifyCategoryExists(Long category_id) {
         if (!categoryRepository.existsById(category_id)) {
