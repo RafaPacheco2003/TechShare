@@ -8,8 +8,9 @@ import org.springframework.data.domain.Page;
 import java.util.Optional;
 
 public interface MovementService {
-    MovementDTO createMovement(MovementRequest movementRequest);
+    MovementDTO createMovement(MovementRequest movementRequest, String authorizationHeader);
 
+     MovementDTO createMovementSale(MovementRequest movementRequest);
     Optional<MovementDTO> getMovementById(Long id);
 
     Optional<MovementDTO> updateMovement(Long id, MovementRequest movementRequest);

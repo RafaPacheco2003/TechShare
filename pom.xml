@@ -12,7 +12,7 @@
 	<artifactId>techshare</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>techshare</name>
-	<description>An inventory management application for the robotics division that allows tracking and overseeing material movements, including entries, exits, adjustments, and loans. Users can record available materials, monitor inventory inflows and outflows, and make adjustments as needed. Additionally, the application facilitates the registration of material and equipment loans, including details about the loan status, the responsible user, and the return date. The system ensures accurate control of materials to efficiently manage resources for robotics projects.</description>
+	<description>An inventory management application for the robotics division that allows tracking and overseeing product movements, including entries, exits, adjustments, and loans. Users can record available products, monitor inventory inflows and outflows, and make adjustments as needed. Additionally, the application facilitates the registration of product and equipment loans, including details about the loan status, the responsible user, and the return date. The system ensures accurate control of products to efficiently manage resources for robotics projects.</description>
 	<url/>
 	<licenses>
 		<license/>

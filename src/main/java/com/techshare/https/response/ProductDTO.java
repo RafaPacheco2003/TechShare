@@ -1,6 +1,7 @@
 package com.techshare.https.response;
 
-public class ProductDTO {    private Long product_id;    private String name;
+public class ProductDTO {
+    private Long product_id;    private String name;
     private String description;
     private Integer stock;
     private Long subcategory_id;
@@ -8,7 +9,17 @@ public class ProductDTO {    private Long product_id;    private String name;
     private Double price;
     private String image;
     private String url;
+
     private Long user_id;
+    private String user_name;
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
 
     public Long getProduct_id() {
         return product_id;

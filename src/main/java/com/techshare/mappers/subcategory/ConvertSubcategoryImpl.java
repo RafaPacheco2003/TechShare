@@ -13,8 +13,9 @@ public class ConvertSubcategoryImpl implements ConvertSubcategory{
 
     @Autowired
     private ModelMapper modelMapper;
+
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository; // ← Inyectar el repositorio
 
     @Override
     public Subcategory convertSubcategoryRequestToSubcategoryEntity(SubcategoryRequest subcategoryRequest) {
@@ -22,27 +23,28 @@ public class ConvertSubcategoryImpl implements ConvertSubcategory{
         subcategory.setName(subcategoryRequest.getName());
         subcategory.setImage(subcategoryRequest.getImage());
 
-        // Asignar categoría a partir del category_id
-        Category category = new Category();
-        category.setCategory_id(subcategoryRequest.getCategory_id());
+        Category category = categoryRepository.findById(subcategoryRequest.getCategory_id())
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + subcategoryRequest.getCategory_id()));
+
         subcategory.setCategory(category);
 
         return subcategory;
     }
+
 
     @Override
     public void convertUpdateSubcategoryRequestToSubcategory(SubcategoryRequest subcategoryRequest, Subcategory existingSubcategory) {
         existingSubcategory.setName(subcategoryRequest.getName());
         existingSubcategory.setImage(subcategoryRequest.getImage());
 
-        // Si es necesario actualizar la categoría
         if (subcategoryRequest.getCategory_id() != null) {
-            Category category = new Category();
-            category.setCategory_id(subcategoryRequest.getCategory_id());
+
+            Category category = categoryRepository.findById(subcategoryRequest.getCategory_id())
+                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + subcategoryRequest.getCategory_id()));
+
             existingSubcategory.setCategory(category);
         }
     }
-
 
     @Override
     public SubcategoryDTO convertSubcategoryEntityToSubcategoryDTO(Subcategory subcategory) {

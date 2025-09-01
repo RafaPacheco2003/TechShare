@@ -45,6 +45,47 @@ public class UserEntity {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Movement> movements;
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Product> products;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public List<Movement> getMovements() {
+        return movements;
+    }
+
+    public void setMovements(List<Movement> movements) {
+        this.movements = movements;
+    }
+
     @Column(name = "role")
     private String role;
 

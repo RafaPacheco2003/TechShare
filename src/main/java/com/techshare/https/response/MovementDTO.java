@@ -18,8 +18,29 @@ public class MovementDTO {
 
     @Temporal(TemporalType.DATE)
     private Date date;
-    private Long material_id;
-    private String material_name;
+
+    private Long product_id;
+    private String product_name;
+
+    private Long user_id;
+    private String user_name;
+
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
 
     public Long getMovement_id() {
         return movement_id;
@@ -61,17 +82,17 @@ public class MovementDTO {
         this.date = date;
     }
 
-    public Long getMaterial_id() {
-        return material_id;
-    }    public void setMaterial_id(Long material_id) {
-        this.material_id = material_id;
+    public Long getProduct_id() {
+        return product_id;
+    }    public void setProduct_id(Long product_id) {
+        this.product_id = product_id;
     }
 
-    public String getMaterial_name() {
-        return material_name;
+    public String getProduct_name() {
+        return product_name;
     }
 
-    public void setMaterial_name(String material_name) {
-        this.material_name = material_name;
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
     }
 }

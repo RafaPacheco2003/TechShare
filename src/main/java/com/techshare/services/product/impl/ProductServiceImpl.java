@@ -1,8 +1,8 @@
 package com.techshare.services.product.impl;
 
+import com.techshare.entities.Product;
 import com.techshare.https.response.ProductDTO;
 import com.techshare.mappers.product.ConvertProduct;
-import com.techshare.entities.Material;
 import com.techshare.entities.Subcategory;
 import com.techshare.https.request.ProductRequest;
 import com.techshare.repositories.ProductRepository;
@@ -44,13 +44,13 @@ public class ProductServiceImpl implements ProductService {
         saveImage(productRequest, multipartFile);
 
         // Convertir la solicitud en entidad
-        Material materialEntity = convertMaterial.convertMaterialRequestToMaterial(productRequest);
+        Product productEntity = convertMaterial.convertMaterialRequestToMaterial(productRequest);
 
         // Guardar el material en la base de datos
-        Material savedMaterial = productRepository.save(materialEntity);
+        Product savedProduct = productRepository.save(productEntity);
 
         // Convertir la entidad guardada en DTO y devolverla
-        return convertMaterial.convertMaterialToMaterialDTO(savedMaterial);
+        return convertMaterial.convertMaterialToMaterialDTO(savedProduct);
     }
 
     @Override
@@ -71,8 +71,8 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id)
                 .map(existingMaterial -> {
                     convertMaterial.convertUpdateMaterialRequestToMaterial(productRequest, existingMaterial);
-                    Material updatedMaterial = productRepository.save(existingMaterial);  // Guardar el material actualizado
-                    return Optional.of(convertMaterial.convertMaterialToMaterialDTO(updatedMaterial));  // Devolver el DTO actualizado
+                    Product updatedProduct = productRepository.save(existingMaterial);  // Guardar el material actualizado
+                    return Optional.of(convertMaterial.convertMaterialToMaterialDTO(updatedProduct));  // Devolver el DTO actualizado
                 })
                 .orElseThrow(() -> new RuntimeException("Material not found with ID: " + id));
     }
@@ -147,15 +147,15 @@ public List<ProductDTO> getMaterialsWithFilters(Long categoryId, Long subcategor
         "price"
     );
 
-    List<Material> materials;
+    List<Product> products;
     // Si no hay filtros, usar findAllMaterials
     if (categoryId == null && subcategoryId == null) {
-        materials = productRepository.findAllMaterials(sort);
+        products = productRepository.findAllMaterials(sort);
     } else {
-        materials = productRepository.findMaterialsWithFilters(categoryId, subcategoryId, sort);
+        products = productRepository.findMaterialsWithFilters(categoryId, subcategoryId, sort);
     }
     
-    return materials.stream()
+    return products.stream()
             .map(material -> {
                 ProductDTO productDTO = convertMaterial.convertMaterialToMaterialDTO(material);
                 // Crear URL de la imagen
@@ -169,13 +169,13 @@ public List<ProductDTO> getMaterialsWithFilters(Long categoryId, Long subcategor
 
     @Override
     public ProductDTO getMaterialWithHighestPrice() {
-        Material material = productRepository.findTopByOrderByPriceDesc();
-        return material != null ? convertMaterial.convertMaterialToMaterialDTO(material) : null;
+        Product product = productRepository.findTopByOrderByPriceDesc();
+        return product != null ? convertMaterial.convertMaterialToMaterialDTO(product) : null;
     }
 
     @Override
     public ProductDTO getMaterialWithLowestPrice() {
-        Material material = productRepository.findTopByOrderByPriceAsc();
-        return material != null ? convertMaterial.convertMaterialToMaterialDTO(material) : null;
+        Product product = productRepository.findTopByOrderByPriceAsc();
+        return product != null ? convertMaterial.convertMaterialToMaterialDTO(product) : null;
     }
 }

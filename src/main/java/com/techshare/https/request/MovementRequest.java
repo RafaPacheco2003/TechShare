@@ -10,7 +10,17 @@ public class MovementRequest {
 
     private String comment;
 
-    private Long material_id;
+    private Long product_id;
+
+    private Long user_id;
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
 
     public MoveType getMoveType() {
         return moveType;
@@ -36,11 +46,11 @@ public class MovementRequest {
         this.comment = comment;
     }
 
-    public Long getMaterial_id() {
-        return material_id;
+    public Long getProduct_id() {
+        return product_id;
     }
 
-    public void setMaterial_id(Long material_id) {
-        this.material_id = material_id;
+    public void setProduct_id(Long product_id) {
+        this.product_id = product_id;
     }
 }

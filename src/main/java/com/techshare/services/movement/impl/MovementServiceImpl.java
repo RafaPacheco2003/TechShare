@@ -1,7 +1,7 @@
 package com.techshare.services.movement.impl;
+import com.techshare.entities.Product;
 import com.techshare.https.response.MovementDTO;
 import com.techshare.mappers.movement.ConvertMovement;
-import com.techshare.entities.Material;
 import com.techshare.entities.enums.MoveType;
 import com.techshare.entities.Movement;
 import com.techshare.https.request.MovementRequest;
@@ -10,6 +10,7 @@ import com.techshare.repositories.MovementRepository;
 import com.techshare.services.movement.MovementService;
 import com.techshare.services.movementProcessor.MovementProcessor;
 
+import com.techshare.util.JwtDecoderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,31 +29,52 @@ public class MovementServiceImpl implements MovementService {
     private final ProductRepository productRepository;
     private final ConvertMovement convertMovement;
     private final Map<MoveType, MovementProcessor> movementProcessorMap;
+    private final JwtDecoderService jwtDecoderService; // o UserIdExtractorService
 
     @Autowired
     public MovementServiceImpl(
             MovementRepository movementRepository,
             ProductRepository productRepository,
             ConvertMovement convertMovement,
-            Map<MoveType, MovementProcessor> movementProcessorMap) {
+            Map<MoveType, MovementProcessor> movementProcessorMap, JwtDecoderService jwtDecoderService) {
         this.movementRepository = movementRepository;
         this.productRepository = productRepository;
         this.convertMovement = convertMovement;
         this.movementProcessorMap = movementProcessorMap;
+        this.jwtDecoderService = jwtDecoderService;
     }
 
 
 
-
-    // Métodos públicos del servicio
     @Override
     @Transactional
-    public MovementDTO createMovement(MovementRequest movementRequest) {
-        Material material = findMaterialById(movementRequest.getMaterial_id());
+    public MovementDTO createMovementSale(MovementRequest movementRequest) {
+        Product product = findMaterialById(movementRequest.getProduct_id());
+
+
+        Movement movementEntity = convertMovement.convertMovementRequestToMovementEntity(movementRequest);
+
+        processMovement(movementEntity, product, movementRequest);
+        Movement savedMovement = saveMovementAndMaterial(movementEntity, product);
+
+        return convertMovement.convertMovementEntityToMovementDTO(savedMovement);
+    }
+
+
+
+    @Override
+    @Transactional
+    public MovementDTO createMovement(MovementRequest movementRequest, String authorizationHeader) {
+        Product product = findMaterialById(movementRequest.getProduct_id());
+
+        Long userId = jwtDecoderService.extractUserIdFromHeader(authorizationHeader);
+
+        movementRequest.setUser_id(userId);
+
         Movement movementEntity = convertMovement.convertMovementRequestToMovementEntity(movementRequest);
         
-        processMovement(movementEntity, material, movementRequest);
-        Movement savedMovement = saveMovementAndMaterial(movementEntity, material);
+        processMovement(movementEntity, product, movementRequest);
+        Movement savedMovement = saveMovementAndMaterial(movementEntity, product);
         
         return convertMovement.convertMovementEntityToMovementDTO(savedMovement);
     }
@@ -67,7 +89,7 @@ public class MovementServiceImpl implements MovementService {
     @Transactional
     public Optional<MovementDTO> updateMovement(Long id, MovementRequest movementRequest) {
         Movement existingMovement = findMovementById(id);
-        validateMaterialChange(existingMovement, movementRequest.getMaterial_id());
+        validateMaterialChange(existingMovement, movementRequest.getProduct_id());
         
         convertMovement.convertUpdateMovementRequestToMovement(movementRequest, existingMovement);
         Movement updatedMovement = movementRepository.save(existingMovement);
@@ -91,8 +113,8 @@ public class MovementServiceImpl implements MovementService {
         dto.setDate(movement.getDate());
 
         if (movement.getMaterial() != null) {
-            dto.setMaterial_id(movement.getMaterial().getProduct_id());
-            dto.setMaterial_name(movement.getMaterial().getName());
+            dto.setProduct_id(movement.getMaterial().getProduct_id());
+            dto.setProduct_name(movement.getMaterial().getName());
         }
 
         return dto;
@@ -109,14 +131,14 @@ public class MovementServiceImpl implements MovementService {
 
 
 
-    private void processMovement(Movement movement, Material material, MovementRequest request) {
+    private void processMovement(Movement movement, Product product, MovementRequest request) {
         MovementProcessor processor = movementProcessorMap.get(movement.getMoveType());
         if (processor == null) {
             throw new IllegalArgumentException("Tipo de movimiento no soportado: " + movement.getMoveType());
         }
-        processor.applyMovement(material, request);
+        processor.applyMovement(product, request);
     }
-    private Material findMaterialById(Long materialId) {
+    private Product findMaterialById(Long materialId) {
         return productRepository.findById(materialId)
                 .orElseThrow(() -> new RuntimeException("Material con ID " + materialId + " no encontrado"));
     }
@@ -128,8 +150,8 @@ public class MovementServiceImpl implements MovementService {
 
 
 
-    private Movement saveMovementAndMaterial(Movement movement, Material material) {
-        productRepository.save(material);
+    private Movement saveMovementAndMaterial(Movement movement, Product product) {
+        productRepository.save(product);
         return movementRepository.save(movement);
     }
 

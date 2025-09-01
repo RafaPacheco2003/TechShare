@@ -3,10 +3,6 @@ package com.techshare.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -28,14 +24,14 @@ public class Subcategory {
     private Category category;
 
     @OneToMany(mappedBy = "subcategory", cascade = CascadeType.ALL)
-    private List<Material> materials;
+    private List<Product> products;
 
-    public List<Material> getMaterials() {
-        return materials;
+    public List<Product> getMaterials() {
+        return products;
     }
 
-    public void setMaterials(List<Material> materials) {
-        this.materials = materials;
+    public void setMaterials(List<Product> products) {
+        this.products = products;
     }
 
     public Long getSubcategory_id() {

@@ -24,15 +24,31 @@ public class Movement {
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
     private Date date;
-    /*
-     * @ManyToOne
-     * 
-     * @JoinColumn(name = "usuario_id")
-     * private Usuario usuario;
-     */
+
     @ManyToOne
-    @JoinColumn(name = "material_id")
-    private Material material;
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity usuario) {
+        this.user = usuario;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public Long getMovement_id() {
         return movement_id;
@@ -74,11 +90,11 @@ public class Movement {
         this.date = date;
     }
 
-    public Material getMaterial() {
-        return material;
+    public Product getMaterial() {
+        return product;
     }
 
-    public void setMaterial(Material material) {
-        this.material = material;
+    public void setMaterial(Product product) {
+        this.product = product;
     }
 }

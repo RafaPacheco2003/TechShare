@@ -44,14 +44,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         UserEntity userEntity = userRepository.findUserEntityByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("El usuario " + username + " no existe."));
 
-        // Contraseña almacenada en la base de datos
-        String storedPassword = userEntity.getPassword();
-
-        // Contraseña ingresada
-        String enteredPassword = "123"; // Cambia esto a la contraseña ingresada por el usuario (esto es solo un ejemplo)
-
-        // Verificar si la contraseña coincide
-        boolean isMatch = passwordEncoder.matches(enteredPassword, storedPassword);
 
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
 
@@ -75,7 +67,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         String username = authLoginRequest.username();
         String password = authLoginRequest.password();
 
-        try {
             Authentication authentication = this.authenticate(username, password);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -91,7 +82,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
             String accessToken = jwtUtils.createToken(authentication);
 
-            emailService.sendWelcomeEmail(username);
+            //emailService.sendWelcomeEmail(username);
 
             return new AuthResponse(
                 username,
@@ -101,26 +92,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 "User logged successfully",
                 accessToken,
                 true);
-        } catch (DisabledException e) {
-            // Captura específicamente el error cuando la cuenta no está verificada
-            return new AuthResponse(
-                username,
-                null,
-                null,
-                null,
-                "La cuenta no está activada. Por favor verifica tu correo electrónico.",
-                null,
-                false);
-        } catch (Exception e) {
-            return new AuthResponse(
-                username,
-                null,
-                null,
-                null,
-                e.getMessage(),
-                null,
-                false);
-        }
+
     }
 
     public Authentication authenticate(String username, String password){

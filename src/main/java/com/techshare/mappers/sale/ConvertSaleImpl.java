@@ -1,5 +1,6 @@
 package com.techshare.mappers.sale;
 
+import com.techshare.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,7 +8,6 @@ import com.techshare.https.response.SaleDTO;
 import com.techshare.https.response.SaleDetailDTO;
 import com.techshare.entities.Sale;
 import com.techshare.entities.SaleDetail;
-import com.techshare.entities.Material;
 import com.techshare.entities.enums.SaleStatus;
 import com.techshare.https.request.SaleRequest;
 import com.techshare.https.request.SaleDetailRequest;
@@ -35,15 +35,15 @@ public class ConvertSaleImpl implements ConvertSale {
         Double totalAmount = 0.0;
 
         for (SaleDetailRequest detailRequest : saleRequest.getDetails()) {
-            Material material = productRepository.findById(detailRequest.getMaterial_id())
+            Product product = productRepository.findById(detailRequest.getMaterial_id())
                     .orElseThrow(() -> new ProductNotFoundException("Material not found with id: " + detailRequest.getMaterial_id()));
 
             SaleDetail detail = new SaleDetail();
             detail.setSale(sale);
-            detail.setMaterial(material);
+            detail.setMaterial(product);
             detail.setQuantity(detailRequest.getQuantity());
-            detail.setUnitPrice(material.getPrice());
-            detail.setSubtotal(material.getPrice() * detailRequest.getQuantity());
+            detail.setUnitPrice(product.getPrice());
+            detail.setSubtotal(product.getPrice() * detailRequest.getQuantity());
             
             details.add(detail);
             totalAmount += detail.getSubtotal();

@@ -1,11 +1,13 @@
 package com.techshare.mappers.movement;
 
+import com.techshare.entities.Product;
+import com.techshare.entities.UserEntity;
 import com.techshare.https.response.MovementDTO;
-import com.techshare.entities.Material;
 import com.techshare.entities.Movement;
 import com.techshare.https.request.MovementRequest;
 import com.techshare.repositories.ProductRepository;
 
+import com.techshare.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ public class ConvertMovementImpl implements ConvertMovement {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Movement convertMovementRequestToMovementEntity(MovementRequest movementRequest) {
@@ -27,9 +31,14 @@ public class ConvertMovementImpl implements ConvertMovement {
         movement.setComment(movementRequest.getComment());
 
         // Obtener el material completo de la base de datos
-        Material material = productRepository.findById(movementRequest.getMaterial_id())
-                .orElseThrow(() -> new RuntimeException("Material no encontrado con ID: " + movementRequest.getMaterial_id()));
-        movement.setMaterial(material);
+        Product product = productRepository.findById(movementRequest.getProduct_id())
+                .orElseThrow(() -> new RuntimeException("Material no encontrado con ID: " + movementRequest.getProduct_id()));
+        movement.setMaterial(product);
+
+        UserEntity user = userRepository.findById(movementRequest.getProduct_id())
+                .orElseThrow(() -> new RuntimeException("User no encontrado con ID: " + movementRequest.getProduct_id()));
+        movement.setUser(user);
+
 
         return movement;
     }    @Override
@@ -39,10 +48,10 @@ public class ConvertMovementImpl implements ConvertMovement {
         existingMovement.setComment(movementRequest.getComment());
 
         // Si es necesario actualizar el material
-        if (movementRequest.getMaterial_id() != null) {
-            Material material = productRepository.findById(movementRequest.getMaterial_id())
-                    .orElseThrow(() -> new RuntimeException("Material no encontrado con ID: " + movementRequest.getMaterial_id()));
-            existingMovement.setMaterial(material);
+        if (movementRequest.getProduct_id() != null) {
+            Product product = productRepository.findById(movementRequest.getProduct_id())
+                    .orElseThrow(() -> new RuntimeException("Material no encontrado con ID: " + movementRequest.getProduct_id()));
+            existingMovement.setMaterial(product);
         }
     }
 
@@ -53,10 +62,15 @@ public class ConvertMovementImpl implements ConvertMovement {
         movementDTO.setMoveType(movement.getMoveType());
         movementDTO.setQuantity(movement.getQuantity());
         movementDTO.setComment(movement.getComment());
-        movementDTO.setDate(movement.getDate());        if (movement.getMaterial() != null) {
-            movementDTO.setMaterial_id(movement.getMaterial().getProduct_id());
-            movementDTO.setMaterial_name(movement.getMaterial().getName());
-        }
+        movementDTO.setDate(movement.getDate());
+
+        movementDTO.setProduct_id(movement.getMaterial().getProduct_id());
+        movementDTO.setProduct_name(movement.getMaterial().getName());
+
+        movementDTO.setUser_id(movement.getUser().getUser_id());
+        movementDTO.setUser_name(movement.getUser().getFirstName() + " " + movement.getUser().getLastName());
+
+
 
         return movementDTO;
     }

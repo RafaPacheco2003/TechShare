@@ -14,7 +14,7 @@ public class SaleDetail {
 
     @ManyToOne
     @JoinColumn(name = "material_id")
-    private Material material;
+    private Product product;
 
     private Integer quantity;
     private Double unitPrice;
@@ -39,12 +39,12 @@ public class SaleDetail {
         this.sale = sale;
     }
 
-    public Material getMaterial() {
-        return material;
+    public Product getMaterial() {
+        return product;
     }
 
-    public void setMaterial(Material material) {
-        this.material = material;
+    public void setMaterial(Product product) {
+        this.product = product;
     }
 
     public Integer getQuantity() {

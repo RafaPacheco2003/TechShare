@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
 @Entity
-public class Material {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)    private Long product_id;

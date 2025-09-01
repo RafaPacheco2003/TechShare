@@ -1,5 +1,6 @@
 package com.techshare.services.sale.impl;
 
+import com.techshare.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.techshare.https.response.SaleDTO;
 import com.techshare.mappers.sale.ConvertSale;
 import com.techshare.entities.Sale;
-import com.techshare.entities.Material;
 import com.techshare.entities.UserEntity;
 import com.techshare.entities.enums.MoveType;
 import com.techshare.entities.enums.SaleStatus;
@@ -53,12 +53,12 @@ public class SaleServiceImpl implements SaleService {
 
         // Verificar stock disponible
         for (SaleDetailRequest detail : saleRequest.getDetails()) {
-            Material material = productRepository.findById(detail.getMaterial_id())
+            Product product = productRepository.findById(detail.getMaterial_id())
                     .orElseThrow(() -> new RuntimeException("Material not found with id: " + detail.getMaterial_id()));
             
-            if (material.getStock() < detail.getQuantity()) {
-                throw new InsufficientStockException("Insufficient stock for material: " + material.getName() + 
-                    ". Available: " + material.getStock() + ", Requested: " + detail.getQuantity());
+            if (product.getStock() < detail.getQuantity()) {
+                throw new InsufficientStockException("Insufficient stock for material: " + product.getName() +
+                    ". Available: " + product.getStock() + ", Requested: " + detail.getQuantity());
             }
         }
 
@@ -72,16 +72,16 @@ public class SaleServiceImpl implements SaleService {
 
         // Actualizar stock de materiales y crear registros de movimientos
         for (SaleDetailRequest detail : saleRequest.getDetails()) {
-            Material material = productRepository.findById(detail.getMaterial_id())
+            Product product = productRepository.findById(detail.getMaterial_id())
                     .orElseThrow(() -> new RuntimeException("Material not found with id: " + detail.getMaterial_id()));
             
             // Crear movimiento de tipo SALE
             MovementRequest movementRequest = new MovementRequest();
-            movementRequest.setMaterial_id(material.getProduct_id());
+            movementRequest.setProduct_id(product.getProduct_id());
             movementRequest.setQuantity(detail.getQuantity());
             movementRequest.setMoveType(MoveType.SALE);
             movementRequest.setComment("Sale movement for sale ID: " + sale.getSale_id());
-            movementService.createMovement(movementRequest);
+            movementService.createMovementSale(movementRequest);
         }
         
         return convertSale.convertSaleToSaleDTO(sale);

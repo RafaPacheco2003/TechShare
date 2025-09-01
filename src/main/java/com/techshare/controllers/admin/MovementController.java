@@ -24,9 +24,13 @@ public class MovementController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody MovementRequest movementRequest){
-        return new ResponseEntity<>(movementService.createMovement(movementRequest), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody MovementRequest movementRequest,
+                                    @RequestHeader("Authorization") String authorizationHeader){
+
+        return new ResponseEntity<>(movementService.createMovement(movementRequest, authorizationHeader), HttpStatus.CREATED);
     }
+
+
     @GetMapping("/all")
     public ResponseEntity<CustomPageResponse<MovementDTO>> findAllMovements(
             @RequestParam(defaultValue = "0") int page,
