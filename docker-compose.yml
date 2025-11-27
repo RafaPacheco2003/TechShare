@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: techshare-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: Blacky20.
+      MYSQL_DATABASE: techshare
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+    ports:
+      - "3307:3306"  # Puerto 3307 en el host para evitar conflictos con MySQL local
+    volumes:
+      - mysql_data:/var/lib/mysql  # Volumen persistente para datos de MySQL
+      - ./init-db:/docker-entrypoint-initdb.d  # Scripts de inicialización
+    networks:
+      - techshare-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: techshare-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      # Database Configuration
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/techshare?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Blacky20.
+      
+      # JPA Configuration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      
+      # Server Configuration
+      SERVER_PORT: 8080
+      SERVER_URL: http://localhost:8080
+      
+      # Storage Configuration
+      STORAGE_LOCATION: /app/uploaded-images
+      
+      # JWT Configuration
+      SECURITY_JWT_KEY: 33ca1120d2f0d3d032b3bedfbe8fae7c2206052b8d500abc36a422af91d72eab
+      SECURITY_JWT_USER_GENERATOR: Rafaul_backend
+      
+      # Email Configuration
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: rodrigorafaelchipacheco@gmail.com
+      SPRING_MAIL_PASSWORD: ebwucgixjplrodcg
+      
+      # OAuth2 Configuration
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID: 864585881875-prq44onbaeg5trspc0q00d91f40j11ja.apps.googleusercontent.com
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET: 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
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_REDIRECT_URI: http://localhost:8080/login/oauth2/code/google
+      
+      # Frontend URL
+      FRONTEND_URL: http://localhost:4200
+      
+      # Stripe Configuration (actualizar con tus claves reales)
+      STRIPE_SECRET_KEY: your_stripe_secret_key
+      STRIPE_WEBHOOK_SECRET: your_stripe_webhook_secret
+      
+      # Active Profile
+      SPRING_PROFILES_ACTIVE: docker
+      
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploaded_images:/app/uploaded-images  # Volumen persistente para imágenes subidas
+    networks:
+      - techshare-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+networks:
+  techshare-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+    # Los datos de MySQL se almacenarán aquí de forma persistente
+  uploaded_images:
+    driver: local
+    # Las imágenes subidas se almacenarán aquí de forma persistente

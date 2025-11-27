@@ -10,6 +10,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -28,7 +30,17 @@ public class JwtUtils {
     public String createToken(Authentication authentication){
         Algorithm algorithm= Algorithm.HMAC256(this.privateKey);
 
-        String username= authentication.getPrincipal().toString();
+        String username;
+        
+        // Extraer email correctamente según el tipo de autenticación
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
+            OAuth2User oauth2User = oauth2Token.getPrincipal();
+            username = oauth2User.getAttribute("email");
+        } else {
+            username = authentication.getPrincipal().toString();
+        }
+        
         String authorities = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)

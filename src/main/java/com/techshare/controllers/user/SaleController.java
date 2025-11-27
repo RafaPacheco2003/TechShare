@@ -12,33 +12,47 @@ import org.slf4j.LoggerFactory;
 import com.techshare.https.response.SaleDTO;
 import com.techshare.https.request.SaleRequest;
 import com.techshare.services.sale.SaleService;
-import com.techshare.repositories.UserRepository;
+import com.techshare.services.user.UserProvisioningService;
 import com.techshare.entities.UserEntity;
 
 import jakarta.validation.Valid;
 import java.util.List;
 
+/**
+ * Controlador REST para gestionar las ventas.
+ * Maneja la creación, consulta y actualización de ventas en el sistema.
+ */
 @RestController
 @RequestMapping("/api/sale")
 public class SaleController {
 
-    @Autowired
-    private SaleService saleService;
-
-    @Autowired
-    private UserRepository userRepository;
-
     private static final Logger logger = LoggerFactory.getLogger(SaleController.class);
+
+    private final SaleService saleService;
+    private final UserProvisioningService userProvisioningService;
+
+    @Autowired
+    public SaleController(SaleService saleService, UserProvisioningService userProvisioningService) {
+        this.saleService = saleService;
+        this.userProvisioningService = userProvisioningService;
+    }
+
+    /**
+     * Obtiene el usuario autenticado del contexto de seguridad.
+     * Si el usuario no existe en la base de datos, lo crea automáticamente.
+     * Esto es útil para usuarios que vienen de OAuth2.
+     */
+    private UserEntity getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userProvisioningService.findOrCreateUser(username);
+    }
 
     @PostMapping
     public ResponseEntity<SaleDTO> createSale(@Valid @RequestBody SaleRequest saleRequest) {
         logger.info("Creating new sale");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        UserEntity user = userRepository.findUserEntityByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
+        UserEntity user = getCurrentUser();
+        logger.debug("Sale being created by user ID: {}", user.getUser_id());
         return ResponseEntity.ok(saleService.createSale(saleRequest, user.getUser_id()));
     }
 
@@ -56,15 +70,13 @@ public class SaleController {
 
     @GetMapping("/user")
     public ResponseEntity<List<SaleDTO>> getSalesByUser() {
-
-        logger.info("Creating new sale");
+        logger.info("Fetching sales by authenticated user");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
-        UserEntity user = userRepository.findUserEntityByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        logger.info("Fetching sales for user: {}", user.getUser_id());
+        logger.debug("Fetching sales for username: {}", username);
+        
+        // Buscar o crear usuario si no existe
+        UserEntity user = userProvisioningService.findOrCreateUser(username);
         return ResponseEntity.ok(saleService.getSalesByUser(user.getUser_id()));
     }
 
